@@ -34,5 +34,17 @@ public class Modes : MonoBehaviour {
 			return instance;   
 	    }// get
     }// getInstance  
+
+
+	// this function is for testing purposes only
+	public void Parse(string myString) {
+		try
+		{
+			Mode enumerable = (Mode)System.Enum.Parse(typeof(Mode), myString);
+			mode = enumerable;
+		} catch (System.Exception) {
+			Debug.LogErrorFormat("Parse: Can't convert {0} to enum, please check the spelling of: ", myString);
+		}// try/catch
+	}// Parse
 	
 }// Modes
