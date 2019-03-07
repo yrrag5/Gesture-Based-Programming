@@ -15,7 +15,7 @@ public class MenuMode : MonoBehaviour {
 		// if the class is not locked out
 		if(!locked){
 			Debug.Log("MenuMode Unlocked");
-
+			
 
 
 		}// if

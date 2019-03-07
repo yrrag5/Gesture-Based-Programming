@@ -1077,15 +1077,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  m_Script: {fileID: 11500000, guid: 008c174a2f6ef274dbb6e1ceebfdf44a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+=======
+>>>>>>> ff0237a6bd602404591d154e0be4b6a6824c348f
   m_Script: {fileID: 11500000, guid: cba9d05abd0e8dd4e8805b2a20271d55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   testing: 1
+<<<<<<< HEAD
 =======
   m_Script: {fileID: 11500000, guid: 53f60ea8e827f8743938cfb3a621072e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 >>>>>>> ee16d995506dd30fc82d446161d59ed524dea0e7
+=======
+>>>>>>> a57ee98fbb0c1603ba4ba9c44cd15b7cc519c28d
+>>>>>>> ff0237a6bd602404591d154e0be4b6a6824c348f
 --- !u!1 &1178286539
 GameObject:
   m_ObjectHideFlags: 0
