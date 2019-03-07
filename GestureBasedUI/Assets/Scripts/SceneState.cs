@@ -16,7 +16,6 @@ public class SceneState : MonoBehaviour {
 	}// Awake
 
 	private SceneState() {  
-
 	}// Constructor 
 
     public static SceneState getInstance {  

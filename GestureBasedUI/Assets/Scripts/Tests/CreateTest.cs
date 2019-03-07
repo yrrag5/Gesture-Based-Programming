@@ -5,7 +5,7 @@ using UnityEngine;
 public class CreateTest : MonoBehaviour {
 	public static Modes modes;
 	public static Modes modes2;
-	public bool testing;
+	public bool create;
 
 	// Use this for initialization
 	void Start () {
