@@ -15,9 +15,6 @@ public class CreateMode : MonoBehaviour {
 		// if the class is not locked out
 		if(!locked){
 			Debug.Log("CreateMode Unlocked");
-
-
-
 		}// if
 	}// Update
 
