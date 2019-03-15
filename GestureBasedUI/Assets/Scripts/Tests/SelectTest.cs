@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SelectTest : MonoBehaviour {
 	public static Modes modes;
+	SceneState sceneState;
+	SelectMode selectMode;
 
 	// Use this for initialization
 	void Start () {
@@ -11,11 +13,21 @@ public class SelectTest : MonoBehaviour {
 		modes = Modes.getInstance;
 		// change the mode
 		modes.mode = Modes.Mode.Select;
-	}
+		
+		// get a handle on the selectMode
+		sceneState = (SceneState)FindObjectOfType(typeof(SceneState));
+	}// Start
 	
 	// Update is called once per frame
 	void Update () {
 		// change the mode
 		modes.mode = Modes.Mode.Select;
-	}
-}
+
+		if(sceneState.ArrayLength() > 0){
+			// get a handle on the sceneState
+			selectMode = (SelectMode)FindObjectOfType(typeof(SelectMode));
+			// pass an object from the sceneState to selectMode
+			selectMode.setSelected(sceneState.getObject(4));
+		}// if
+	}// Update
+}// SelectTest

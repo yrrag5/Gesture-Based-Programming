@@ -6,6 +6,9 @@ public class SelectMode : MonoBehaviour {
 	public static Modes modes;
 	// lock
 	private bool locked = true;
+	// selected gameobject placeholder
+	private GameObject selected;
+
 	public bool Locked {
 		get { return locked; }
 		set { locked = value; }
@@ -20,6 +23,20 @@ public class SelectMode : MonoBehaviour {
 
 		}// if
 	}// Update
+
+	public void setSelected(GameObject g){
+		// set the object as selected
+		selected = g;
+		// focus on selected object
+		FocusSelected();
+	}// setSelected
+
+	public void FocusSelected(){
+		// getting a handle on the LookAt script
+		LookAt lookAt = (LookAt)FindObjectOfType(typeof(LookAt));
+		// passing the selected objects transform to the LookAt script
+		lookAt.Focus(selected.transform.position);
+	}// focusSelected
 
 	public void CreateMode() {
 		// change the mode to exit

@@ -9,6 +9,8 @@ public class SceneState : MonoBehaviour {
 	private GameObject[] objects;
 
 	void Awake() {
+		this.objects = new GameObject[0];
+
 		if(instance != null && instance != this) {
 			Destroy(this.gameObject);
 		}// if
@@ -33,16 +35,18 @@ public class SceneState : MonoBehaviour {
     }// getInstance  
 
 	public void AddGameObject(GameObject newObject) {
+		int i;
 		// create a new array with space for another element
 		GameObject[] temp = new GameObject[ArrayLength() + 1];
 		// copy the contents of the objects array into the new array
-		for(int i = 0; i < ArrayLength(); i++) {
+		for(i = 0; i < ArrayLength(); i++) {
 			temp[i] = objects[i];
 		}// for
 		// add the new gameobject to the new array
 		temp[ArrayLength()] = newObject;
 		// set the objects array to the new array
 		objects = temp;
+		Debug.Log("Object number " + ArrayLength() + " added!");
 	}// AddGameObject
 
 	public void RemoveGameObject(int index) {
@@ -65,7 +69,11 @@ public class SceneState : MonoBehaviour {
 	}// getObjects
 
 	public GameObject getObject(int index) {
-		return objects[index];
+		if(ArrayLength() > index) {
+			return this.objects[index];
+		} else {
+			return this.objects[0];
+		}// if/else
 	}// getObject
 
 	public int ArrayLength() {
