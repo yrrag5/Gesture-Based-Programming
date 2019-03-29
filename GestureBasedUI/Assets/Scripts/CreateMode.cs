@@ -19,6 +19,8 @@ public class CreateMode : MonoBehaviour {
 	}// Update
 
 	public void MenuMode() {
+		// gets a handle on the singleton instance
+		modes = Modes.getInstance;
 		// change the mode
 		modes.mode = Modes.Mode.Menu;
 		// open the lock on the runner
@@ -29,6 +31,8 @@ public class CreateMode : MonoBehaviour {
 	}// CreateMode
 
 	public void SelectMode() {
+		// gets a handle on the singleton instance
+		modes = Modes.getInstance;
 		// change the mode to exit
 		modes.mode = Modes.Mode.Select;
 		// open the lock on the runner
