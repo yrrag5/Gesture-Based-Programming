@@ -16,6 +16,5 @@ public class CreateTest : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		modes.mode = Modes.Mode.Create;
-
 	}
 }
