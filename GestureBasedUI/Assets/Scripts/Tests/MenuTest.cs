@@ -4,6 +4,28 @@ using UnityEngine;
 
 public class MenuTest : MonoBehaviour {
     public static Modes modes;
+    public GameObject Panel;
+    int counter;
+
+
+    public void GameSettings()
+    {
+        counter++;
+        if (counter % 2 == 1)
+        {
+            Panel.gameObject.SetActive(false);
+        }
+        else
+        {
+            Panel.gameObject.SetActive(true);
+        }
+    }
+
+    public void ExitGame()
+    {
+        Debug.Log("Exit game");
+        Application.Quit();
+    }
 
     // Use this for initialization
     void Start () {
@@ -18,6 +40,6 @@ public class MenuTest : MonoBehaviour {
         modes.mode = Modes.Mode.Menu;
         // open the lock on the runner
         ModeRunner mr = GameObject.FindObjectOfType<ModeRunner>();
-
     }
+    
 }

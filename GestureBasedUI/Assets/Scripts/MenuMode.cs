@@ -15,6 +15,7 @@ public class MenuMode : MonoBehaviour {
 		// if the class is not locked out
 		if(!locked){
 			Debug.Log("MenuMode Unlocked");
+            //Set transform position of the camera to x = 0 y = 1 z = -10 
 			
 
 
@@ -22,8 +23,10 @@ public class MenuMode : MonoBehaviour {
 	}// Update
 
 	public void CreateMode() {
-		// change the mode
-		modes.mode = Modes.Mode.Create;
+        // gets a handle on the singleton instance
+        modes = Modes.getInstance;
+        // change the mode
+        modes.mode = Modes.Mode.Create;
 		// open the lock on the runner
 		ModeRunner mr = GameObject.FindObjectOfType<ModeRunner>();
 		mr.Locked = false;
@@ -32,8 +35,10 @@ public class MenuMode : MonoBehaviour {
 	}// CreateMode
 
 	public void SelectMode() {
-		// change the mode
-		modes.mode = Modes.Mode.Select;
+        // gets a handle on the singleton instance
+        modes = Modes.getInstance;
+        // change the mode
+        modes.mode = Modes.Mode.Select;
 		// open the lock on the runner
 		ModeRunner mr = GameObject.FindObjectOfType<ModeRunner>();
 		mr.Locked = false;
@@ -42,8 +47,10 @@ public class MenuMode : MonoBehaviour {
 	}// CreateMode
 
 	public void Exit() {
-		// change the mode to exit
-		modes.mode = Modes.Mode.Exit;
+        // gets a handle on the singleton instance
+        modes = Modes.getInstance;
+        // change the mode to exit
+        modes.mode = Modes.Mode.Exit;
 		// open the lock on the runner
 		ModeRunner mr = GameObject.FindObjectOfType<ModeRunner>();
 		mr.Locked = false;
