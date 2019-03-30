@@ -18,6 +18,7 @@ public class CreateMode : MonoBehaviour {
 		}// if
 	}// Update
 
+	// MODE CHANGING METHODS.
 	public void MenuMode() {
 		// gets a handle on the singleton instance
 		modes = Modes.getInstance;
@@ -31,6 +32,10 @@ public class CreateMode : MonoBehaviour {
 	}// CreateMode
 
 	public void SelectMode() {
+		// Pass selected game object to SelectMode script.
+	 // SelectMode sm = GameObject.FindObjectOfType<SelectMode>();
+	 // sm.setSelected(selected);
+
 		// gets a handle on the singleton instance
 		modes = Modes.getInstance;
 		// change the mode to exit

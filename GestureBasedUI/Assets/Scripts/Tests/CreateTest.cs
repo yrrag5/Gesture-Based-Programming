@@ -10,21 +10,21 @@ public class CreateTest : MonoBehaviour {
 	public int arrayLength;
 	public int arrayIndex;
 
-	// Use this for initialization
+	// Use this for initialization.
 	void Start () {
 
 		currMode = Modes.getInstance;
 		currMode.mode = Modes.Mode.Create;
 		
 		sceneState = (SceneState)FindObjectOfType(typeof(SceneState));
-		
-		// Get the length of the array
+
+		// Get the length of the array.
 		arrayLength = sceneState.ArrayLength();
 		
 		if (arrayLength != 0) {
 			Debug.Log("length: " + arrayLength);
 
-			// set selected shape to last shape in GameObjects array
+			// Set selected shape to last shape in GameObjects array.
 			selected = sceneState.getObject(arrayLength - 1);
 		}
 		else {
@@ -33,39 +33,60 @@ public class CreateTest : MonoBehaviour {
 
 	}// start
 	
-	// Update is called once per frame
+	// Update is called once per frame.
 	void Update () {
-		// detect Myo gestures (left, right, close, exit).
+		// Detect Myo gestures (left, right, close, exit).
 	}
 
 	void ParseLeft (int arrayIndex) {
 		// Get rid of highlight on current GameObject.
-		ToggleHighlight(arrayIndex);
+		ToggleHighlight();
 		// Select GameObject by decrementing index of array by 1.
 		// if index == 0, select the last GameObject in array.
+		if (arrayIndex == 0) 
+			selected = sceneState.getObject(arrayIndex - 1);
+		else {
+			arrayIndex -= 1;
+			selected = sceneState.getObject(arrayIndex);
+		}
+
+		// Need code for camera.
+
 		// Highlight the newly selected shape.
+		ToggleHighlight();		
 	}
 
 	void ParseRight (int arrayIndex) {
 		// Get rid of highlight on current GameObject.
-		ToggleHighlight(arrayIndex);
+		ToggleHighlight();
+
 		// Select GameObject by incrementing index of array by 1.
 		// if index == array.length - 1, select the first GameObject in array.
+		if (arrayIndex == arrayLength - 1) 
+			selected = sceneState.getObject(arrayIndex - 1);
+		else {
+			arrayIndex += 1;
+			selected = sceneState.getObject(arrayIndex);
+		}
+
+		// Need code for camera.
+
 		// Highlight the newly selected shape.
+		ToggleHighlight();	
 	}
 
 	void ReturnToMenu() {
 		// Get rid of highlight on current GameObject.
-		ToggleHighlight(arrayIndex);
+		ToggleHighlight();
 		// Change back to menu mode.
 	}
 
-	void SelectHighlighted(int arrayIndex) {
-		// Change to Select mode, passing the array index of the current highlighted object.
-	}
-
-	void ToggleHighlight(int arrayIndex) {
+	void ToggleHighlight() {
 		// Toggle between highlighted and not.
+		if (selected.GetComponent<Renderer>().material.color == Color.white) 
+			selected.GetComponent<Renderer>().material.color = Color.red;
+		else
+			selected.GetComponent<Renderer>().material.color = Color.white;
 	}
 
 }
