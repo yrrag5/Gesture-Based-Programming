@@ -27,8 +27,20 @@ public class SelectMode : MonoBehaviour {
 	public static Modes modes;
 	// lock
 	private bool locked = true;
-	// selected gameobject placeholder
+	// gyro reset control
+	private bool gyroReset = true;
+	// x, y and z gyro values
+	private float baseGyroX;
+	private float baseGyroY;
+	private float baseGyroZ;
+	// selected gameobject
 	private GameObject selected;
+
+	private enum Axis { X, Y, Z }
+	// intialize the enum
+	Axis current = Axis.X;
+
+	private Pose lastPose;
 
 	public bool Locked {
 		get { return locked; }
@@ -42,35 +54,59 @@ public class SelectMode : MonoBehaviour {
 			// Access the ThalmicMyo component attached to the Myo object.
         	ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo> ();
 
-			if(thalmicMyo.pose == Pose.Fist) {
-				/*
-				// testing
-				float x = thalmicMyo.transform.position.x;
-				float y = thalmicMyo.transform.position.y; 
-				float z = thalmicMyo.transform.position.z;
-				*/
+			// if the fist pose is detected and was the last pose
+			if(thalmicMyo.pose == Pose.Fist && thalmicMyo.pose == lastPose) {
+				float movementDegree = 0;
 
-				// use acc to move
-				// float x = thalmicMyo.accelerometer.x / 10;
-				// float y = thalmicMyo.accelerometer.y / 10;
-				// float z = thalmicMyo.accelerometer.z / 10;
+				// get the current values
+				if(gyroReset){
+					// set the current gyro y value
+					baseGyroY = thalmicMyo.gyroscope.y;
+					// set the control to false
+					gyroReset = false;
+					// Debug.Log("Gyro has been reset");
+				}// if 
 				
-				float x = thalmicMyo.gyroscope.x /100;
-				float y = thalmicMyo.gyroscope.y /100;
-				float z = thalmicMyo.gyroscope.z /100;
+				// if there has been no change to the gyro
+				if(baseGyroY - thalmicMyo.gyroscope.y == 0.000000) {
+						// zero the movement degree
+						movementDegree = 0;
+						// Debug.Log("Zero out of data");
+				} else {
+					// accessing the gyro y value
+					movementDegree = (thalmicMyo.gyroscope.y - baseGyroY) / 150;	
+					// Debug.Log("Movement Degree: " + movementDegree);
+				}// else if
+				
+				// pass to the movement calculation method
+				CalculateMovement(movementDegree);
+			} else if(thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
+				// move down through the enum 
+				cycleEnum(0);
+				
+				Debug.Log(current);
 
-				// print out		
-				Debug.Log("X: " + x + ", Y: " + y + ", Z: " + z);
+				// reset the gyro control
+				gyroReset = true;
+			} else if(thalmicMyo.pose == Pose.WaveOut && thalmicMyo.pose != lastPose) {
+				// move up through the enum
+				cycleEnum(1);
 
-				Vector3 acc = new Vector3(x, y, z);
-				float speed = 1f;
-         		selected.transform.Translate(acc.x * speed, 0, acc.y * speed);
-			}// if
-			
+				Debug.Log(current);
+				
+				// reset the gyro control
+				gyroReset = true;
+			} else {
+				// reset the gyro control
+				gyroReset = true;
+			}// if/else if/else
+
+			// update the last pose detected
+			lastPose = thalmicMyo.pose;
 		}// if
 	}// Update
 
-	public void setSelected(GameObject g){
+	public void SetSelected(GameObject g){
 		// set the object as selected
 		selected = g;
 		// disable the rigidbody component
@@ -97,12 +133,38 @@ public class SelectMode : MonoBehaviour {
 			selectedRB.isKinematic = true;
 	}// ToggleSelectedRigidbody
 
-	
-	private Vector3 motion;
-	// adapted from: https://stackoverflow.com/questions/18836484/convert-yaw-pitch-and-roll-to-x-y-z-vector-in-world-coordinates
-	public void CalculateMovement(){
-		
+	public void CalculateMovement(float movementDegree){
+		// set the new translate vector
+		Vector3 acc = new Vector3(movementDegree, 0, movementDegree);
+		// speed control
+		float speed = 0.8f;
+		// translate the position of the selected object
+		if(current == Axis.X)
+        	selected.transform.Translate(acc.x * speed, 0, 0);
+		else if(current == Axis.Y)
+			selected.transform.Translate(0, acc.x * speed, 0);
+		else if(current == Axis.Z)
+			selected.transform.Translate(0, 0, acc.x * speed);
 	}// MoveObject
+
+	public void cycleEnum(int direction) {
+		// 1 for cycle up and 0 for cycle down
+		if(direction == 1){
+			if(current == Axis.X)
+				current = Axis.Y;
+			else if(current == Axis.Y)
+				current = Axis.Z;
+			else if(current == Axis.Z)
+				current = Axis.X;
+		} else {
+			if(current == Axis.X)
+				current = Axis.Z;
+			else if(current == Axis.Y)
+				current = Axis.X;
+			else if(current == Axis.Z)
+				current = Axis.Y;
+		}// if/else
+	}// cycleEnum
 
 	public void CreateMode() {
 		// enable the rigidbody component
@@ -118,53 +180,6 @@ public class SelectMode : MonoBehaviour {
 		this.locked = true;
 	}// Exit
 
-		
-	// Compute the angle of rotation clockwise about the forward axis relative to the provided zero roll direction.
-	// As the armband is rotated about the forward axis this value will change, regardless of which way the
-	// forward vector of the Myo is pointing. The returned value will be between -180 and 180 degrees.
-	float rollFromZero (Vector3 zeroRoll, Vector3 forward, Vector3 up)
-	{
-		// The cosine of the angle between the up vector and the zero roll vector. Since both are
-		// orthogonal to the forward vector, this tells us how far the Myo has been turned around the
-		// forward axis relative to the zero roll vector, but we need to determine separately whether the
-		// Myo has been rolled clockwise or counterclockwise.
-		float cosine = Vector3.Dot (up, zeroRoll);
-
-		// To determine the sign of the roll, we take the cross product of the up vector and the zero
-		// roll vector. This cross product will either be the same or opposite direction as the forward
-		// vector depending on whether up is clockwise or counter-clockwise from zero roll.
-		// Thus the sign of the dot product of forward and it yields the sign of our roll value.
-		Vector3 cp = Vector3.Cross (up, zeroRoll);
-		float directionCosine = Vector3.Dot (forward, cp);
-		float sign = directionCosine < 0.0f ? 1.0f : -1.0f;
-
-		// Return the angle of roll (in degrees) from the cosine and the sign.
-		return sign * Mathf.Rad2Deg * Mathf.Acos (cosine);
-	}
-
-	// Compute a vector that points perpendicular to the forward direction,
-	// minimizing angular distance from world up (positive Y axis).
-	// This represents the direction of no rotation about its forward axis.
-	Vector3 computeZeroRollVector (Vector3 forward)
-	{
-		Vector3 antigravity = Vector3.up;
-		Vector3 m = Vector3.Cross (myo.transform.forward, antigravity);
-		Vector3 roll = Vector3.Cross (m, myo.transform.forward);
-
-		return roll.normalized;
-	}
-
-	// Adjust the provided angle to be within a -180 to 180.
-	float normalizeAngle (float angle)
-	{
-		if (angle > 180.0f) {
-			return angle - 360.0f;
-		}
-		if (angle < -180.0f) {
-			return angle + 360.0f;
-		}
-		return angle;
-	}
-
-
 }// SelectMode
+
+// ref from: https://stackoverflow.com/questions/18836484/convert-yaw-pitch-and-roll-to-x-y-z-vector-in-world-coordinates

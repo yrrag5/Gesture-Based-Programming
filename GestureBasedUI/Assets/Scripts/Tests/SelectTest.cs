@@ -34,7 +34,7 @@ public class SelectTest : MonoBehaviour {
 			// get a handle on the sceneState
 			selectMode = (SelectMode)FindObjectOfType(typeof(SelectMode));
 			// pass an object from the sceneState to selectMode
-			selectMode.setSelected(sceneState.getObject(index));
+			selectMode.SetSelected(sceneState.getObject(index));
 		}// if
 	}// Update
 
