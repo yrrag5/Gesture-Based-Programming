@@ -2,13 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using LockingPolicy = Thalmic.Myo.LockingPolicy;
+using Pose = Thalmic.Myo.Pose;
+using UnlockType = Thalmic.Myo.UnlockType;
+using VibrationType = Thalmic.Myo.VibrationType;
+
 public class CreateMode : MonoBehaviour {
+
 	// Global variables.
 	public static Modes modes;
-	public SceneState sceneState;
-	public GameObject selected;
+	private SceneState sceneState;
+	private GameObject selected;
 	public int arrayLength;
 	public int arrayIndex;
+
+	// Myo variables.
+	public GameObject myo = null;
+	private Pose lastPose = Pose.Unknown;
 
 	// Lock.
 	private bool locked = true;
@@ -39,9 +49,45 @@ public class CreateMode : MonoBehaviour {
 		// If the class is not locked out.
 		if(!locked) {
 			Debug.Log("CreateMode Unlocked");
-		}// if
+			
+			// Detect Myo gestures (left, right, close, exit).
+			// Access the ThalmicMyo component attached to the Myo object.
+       		ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo> ();
 
-		// Detect Myo gestures (left, right, close, exit).
+			// Update references when the pose becomes fingers spread or the q key is pressed.
+			if (thalmicMyo.pose != lastPose) {
+				lastPose = thalmicMyo.pose;
+
+				if (thalmicMyo.pose == Pose.FingersSpread) {
+					Debug.Log("create mode - Finger Spread");
+				//	MenuMode();
+				}
+			}
+			else if (thalmicMyo.pose != lastPose) {
+				lastPose = thalmicMyo.pose;
+				
+				if (thalmicMyo.pose == Pose.WaveIn) {
+					Debug.Log("create mode - Wave in");
+				//	ParseLeft(arrayIndex);
+				}
+			}
+			else if (thalmicMyo.pose != lastPose) {
+				lastPose = thalmicMyo.pose;
+				
+				if (thalmicMyo.pose == Pose.WaveOut) {
+					Debug.Log("create mode - Wave out");
+					ParseRight(arrayIndex);
+				}
+			}
+			else if (thalmicMyo.pose != lastPose) {
+				lastPose = thalmicMyo.pose;
+				
+				if (thalmicMyo.pose == Pose.DoubleTap) {
+					Debug.Log("create mode - Double Tap");
+				//	SelectMode();
+				}
+			}
+		}// if
 
 	}// Update
 
@@ -52,7 +98,7 @@ public class CreateMode : MonoBehaviour {
 		// Select GameObject by decrementing index of array by 1.
 		// if index == 0, select the last GameObject in array.
 		if (arrayIndex == 0) 
-			selected = sceneState.getObject(arrayIndex - 1);
+			selected = sceneState.getObject(arrayLength - 1);
 		else {
 			arrayIndex -= 1;
 			selected = sceneState.getObject(arrayIndex);
@@ -71,7 +117,7 @@ public class CreateMode : MonoBehaviour {
 		// Select GameObject by incrementing index of array by 1.
 		// if index == array.length - 1, select the first GameObject in array.
 		if (arrayIndex == arrayLength - 1) 
-			selected = sceneState.getObject(arrayIndex - 1);
+			selected = sceneState.getObject(0);
 		else {
 			arrayIndex += 1;
 			selected = sceneState.getObject(arrayIndex);
@@ -81,12 +127,6 @@ public class CreateMode : MonoBehaviour {
 
 		// Highlight the newly selected shape.
 		ToggleHighlight();	
-	}
-
-	void ReturnToMenu() {
-		// Get rid of highlight on current GameObject.
-		ToggleHighlight();
-		// Change back to menu mode.
 	}
 
 	void ToggleHighlight() {
@@ -99,6 +139,10 @@ public class CreateMode : MonoBehaviour {
 
 	// ----- MODE CHANGING METHODS -----
 	public void MenuMode() {
+		// Get rid of highlight on current GameObject.
+		ToggleHighlight();
+		// Change back to menu mode.
+
 		// Gets a handle on the singleton instance.
 		modes = Modes.getInstance;
 		// Change the mode.

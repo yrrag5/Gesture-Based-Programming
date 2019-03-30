@@ -554,7 +554,6 @@ GameObject:
   m_Component:
   - component: {fileID: 376663780}
   - component: {fileID: 376663781}
-  - component: {fileID: 376663782}
   m_Layer: 0
   m_Name: CreateMode
   m_TagString: Untagged
@@ -586,25 +585,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d3af24e61a398d4a9efb0af8b69fd82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneState: {fileID: 0}
-  selected: {fileID: 0}
   arrayLength: 0
   arrayIndex: 0
---- !u!114 &376663782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 376663779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cba9d05abd0e8dd4e8805b2a20271d55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneState: {fileID: 0}
-  selected: {fileID: 0}
-  arrayLength: 0
-  arrayIndex: 0
+  myo: {fileID: 1993222934}
 --- !u!1 &402123785
 GameObject:
   m_ObjectHideFlags: 0
@@ -1565,13 +1548,14 @@ GameObject:
   - component: {fileID: 1089782548}
   - component: {fileID: 1089782550}
   - component: {fileID: 1089782551}
+  - component: {fileID: 1089782552}
   m_Layer: 0
   m_Name: TestingObject
   m_TagString: Tests
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1089782548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1620,6 +1604,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008c174a2f6ef274dbb6e1ceebfdf44a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1089782552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1089782547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cba9d05abd0e8dd4e8805b2a20271d55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneState: {fileID: 0}
+  selected: {fileID: 0}
+  arrayLength: 0
+  arrayIndex: 0
 --- !u!1001 &1128068521
 Prefab:
   m_ObjectHideFlags: 0
@@ -2657,6 +2656,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4808144880366660, guid: 354cc2550b9fdf248afd125f3cc51ddb,
     type: 2}
   m_PrefabInternal: {fileID: 552432337}
+--- !u!1 &1993222934 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 863250160b56e46dbb2d227833b7338a,
+    type: 2}
+  m_PrefabInternal: {fileID: 591909624}
 --- !u!4 &2023894516 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4869099492255046, guid: 7d751e6d915d9a449b6e2f7794118a0a,
