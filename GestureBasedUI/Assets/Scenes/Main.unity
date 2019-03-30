@@ -873,6 +873,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8df6cdbf548f0824f8f6bdf0e758c9bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heightChange: 0
+  distanceChange: 0
 --- !u!1001 &551600097
 Prefab:
   m_ObjectHideFlags: 0
@@ -1600,6 +1602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008c174a2f6ef274dbb6e1ceebfdf44a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 0
 --- !u!1001 &1128068521
 Prefab:
   m_ObjectHideFlags: 0
