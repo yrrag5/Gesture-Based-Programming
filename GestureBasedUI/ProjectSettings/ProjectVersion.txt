@@ -1,6 +1,1 @@
 m_EditorVersion: 2018.2.12f1
-<<<<<<< HEAD
-
-
-=======
->>>>>>> b3f35dc2f58400ccdb496226c30aa32380f15afd

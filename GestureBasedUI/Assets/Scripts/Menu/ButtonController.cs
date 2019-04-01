@@ -13,7 +13,7 @@ public class ButtonController {
     public void SaveGame()
     {
         GameInProgress gameToSave = new GameInProgress();
-        SaveLoad.Save(gameToSave);
+       // SaveLoad.Save(gameToSave);
     }
 
 	

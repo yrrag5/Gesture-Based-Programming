@@ -12,12 +12,11 @@ public class SaveLoad: MonoBehaviour {
     [System.Serializable]
     class Objects
     {
-        public float obj1;
-        public float obj2;
-        public float obj3;
-        public float obj4;
-        public float obj5;
-
+        public GameObject obj1;
+        public GameObject obj2;
+        public GameObject obj3;
+        public GameObject obj4;
+        public GameObject obj5;
     }
 
     public void Save(GameInProgress saveGame)
@@ -29,25 +28,34 @@ public class SaveLoad: MonoBehaviour {
         {
             Objects newData = new Objects();
 
-            newData.obj1 = Object[i].transform.position.x;
+          /*  newData.obj1 = Object[i].transform.position.x;
             newData.obj2 = Object[i].transform.position.x;
             newData.obj3 = Object[i].transform.position.x;
             newData.obj4 = Object[i].transform.position.x;
-            newData.obj5 = Object[i].transform.position.x;
-
-        }
+            newData.obj5 = Object[i].transform.position.x;*/
+        }// for
         bf.Serialize(file, newDataCollection);
         file.Close();
         Debug.Log("Game Saved");
     }
 
-    public static void Load()
+   /* public void Load()
     {
         if (File.Exists(FileName))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = new FileStream(FileName, FileMode.Open,FileAccess)
+            FileStream file = new FileStream(FileName, FileMode.Create);
+
+            Objects newData1 = (Objects)bf.Deserialize(file);
+            for(int i = 0; i < Object.Length; i++)
+            {
+
+                Object[i].transform.position = new Vector4(newData1.obj1, newData1.obj2, newData1.obj3, newData1.obj4, newData1.obj5);
+            }
+            file.Close();
         }
-    }
+
+    }*/
 }
+
 
