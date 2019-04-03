@@ -26,6 +26,7 @@ public class SelectMode : MonoBehaviour {
 	void Update(){
 		// if the class is not locked out
 		if(!locked){
+			// myo = GameObject.FindGameObjectWithTag("myo");
 			// Access the ThalmicMyo component attached to the Myo object.
         	ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo>();
 
