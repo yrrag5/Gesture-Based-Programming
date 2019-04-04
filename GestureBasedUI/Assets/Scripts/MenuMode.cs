@@ -26,8 +26,8 @@ public class MenuMode : MonoBehaviour {
 	public Button[] UIButtons;
 
 	public int selectedButton = 0;
-	public Button selected;
-	public Material shapecolor;
+	private Button selected;
+	private Material shapecolor;
 	public Material highlight;
 
 	void Start() {
@@ -37,6 +37,7 @@ public class MenuMode : MonoBehaviour {
 		Debug.Log(buttons.Length);
 		for(int i = 0; i < buttons.Length; i++)
 			UIButtons[i] = buttons[i].GetComponent<Button>();	
+		selected = UIButtons[0];
 		ToggleHighlight();
 	}
 
@@ -143,11 +144,11 @@ public class MenuMode : MonoBehaviour {
 
 	public void ToggleHighlight() {
 		// If material is highlighted.
-		if (selected.GetComponent<Renderer>().material == highlight)
-			selected.GetComponent<Renderer>().material = shapecolor;
+		if (selected.GetComponent<Image>().material == highlight)
+			selected.GetComponent<Image>().material = shapecolor;
 		else { // otherwise, store the material and then change to highlighted.
-			shapecolor = selected.GetComponent<Renderer>().material;
-			selected.GetComponent<Renderer>().material = highlight;
+			shapecolor = selected.GetComponent<Image>().material;
+			selected.GetComponent<Image>().material = highlight;
 		}
 	}
 	public void CreateMode() {

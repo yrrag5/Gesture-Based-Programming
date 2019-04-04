@@ -15,7 +15,7 @@ public class CreateMode : MonoBehaviour {
 	private GameObject selected;
 	public int arrayLength;
 	public int arrayIndex;
-	public Material shapecolor;
+	private Material shapecolor;
 	public Material highlight;
 	public Canvas gameUI;
 
@@ -47,59 +47,81 @@ public class CreateMode : MonoBehaviour {
 			Debug.Log("Object array is empty");
 			arrayIndex = -1;
 		}
+		Debug.Log(selected);
 	}
 
 	void Update() {
 		// If the class is not locked out.
 		if(!locked) {
-			Debug.Log("CreateMode Unlocked");
+			if(selected == null && sceneState.ArrayLength() >= 0)
+				selected = sceneState.getObject(0);
+			
+			if(selected != null) {
+				FocusSelected();
+				Debug.Log("CreateMode Unlocked");
 
-			// Detect Myo gestures (left, right, close, exit).
-			// Access the ThalmicMyo component attached to the Myo object.
-       		ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo> ();
+				// Detect Myo gestures (left, right, close, exit).
+				// Access the ThalmicMyo component attached to the Myo object.
+				ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo> ();
 
-			// Update references when the pose becomes fingers spread or the q key is pressed.
-			// if pose == whatever && != lastpose
- 			if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
-				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-				// Ask the user if they want to exit to menu.
-				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit to Menu.");
-			}
-			else if (lastPose == Pose.FingersSpread) {
-				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-				Debug.Log("create mode - Finger Spread");
-				MenuMode();
-			}
-			else if (thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
-				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-				Debug.Log("create mode - Wave in");
-				if (arrayIndex == -1)
-					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Object array is empty! Please create objects.");
-				else 
-					ParseLeft(arrayIndex);
-			}
-			else if (thalmicMyo.pose == Pose.WaveOut && thalmicMyo.pose != lastPose) {
-				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-				Debug.Log("create mode - Wave out");
-				if (arrayIndex == -1)
-					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Object array is empty! Please create objects.");
-				else 
-					ParseRight(arrayIndex);
-			}
-			else if (thalmicMyo.pose == Pose.DoubleTap && thalmicMyo.pose != lastPose) {
-				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-				Debug.Log("create mode - Double Tap");
-				if (arrayIndex == -1)
-					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Object array is empty! Please create objects.");
-				else 
-					SelectMode();
-			}
-
-			lastPose = thalmicMyo.pose;			
+				// Update references when the pose becomes fingers spread or the q key is pressed.
+				// if pose == whatever && != lastpose
+				if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
+					// Ask the user if they want to exit to menu.
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit to Menu.");
+				}
+				else if (lastPose == Pose.FingersSpread) {
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
+					Debug.Log("create mode - Finger Spread");
+					MenuMode();
+				}
+				else if (thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
+					Debug.Log("create mode - Wave in");
+					if (arrayIndex == -1)
+						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Object array is empty! Please create objects.");
+					else 
+						ParseLeft(arrayIndex);
+				}
+				else if (thalmicMyo.pose == Pose.WaveOut && thalmicMyo.pose != lastPose) {
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
+					Debug.Log("create mode - Wave out");
+					if (arrayIndex == -1)
+						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Object array is empty! Please create objects.");
+					else 
+						ParseRight(arrayIndex);
+				}
+				else if (thalmicMyo.pose == Pose.DoubleTap && thalmicMyo.pose != lastPose) {
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
+					Debug.Log("create mode - Double Tap");
+					if (arrayIndex == -1)
+						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Object array is empty! Please create objects.");
+					else 
+						SelectMode();
+				}
+				/*
+				if (Input.GetKeyDown ("c")) {
+            	// cycle through the objects
+					CycleIndex();
+        		}
+				*/
+				lastPose = thalmicMyo.pose;			
+			}// if
 		}// if
 		
 	}// Update
+	/* 
+	void CycleIndex(){
+		if(sceneState.ArrayLength()-2 < arrayIndex || arrayIndex < 0)
+			arrayIndex = 0;
+		else
+			arrayIndex = arrayIndex +1;
 
+		selected = sceneState.getObject(arrayIndex);
+		FocusSelected();
+	}
+	*/
 	// ----- MODE FUNCTIONALITY -----
 	void ParseLeft (int arrayIndex) {
 		// Get rid of highlight on current GameObject.
