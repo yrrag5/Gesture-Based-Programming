@@ -73,7 +73,7 @@ public class SceneState : MonoBehaviour {
 		if(ArrayLength() > index) {
 			return this.objects[index];
 		} else {
-			return this.objects[0];
+			return null;
 		}// if/else
 	}// getObject
 

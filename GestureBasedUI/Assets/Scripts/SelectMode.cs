@@ -32,21 +32,27 @@ public class SelectMode : MonoBehaviour {
 
 			// if the fist pose is detected and was the last pose
 			if(thalmicMyo.pose == Pose.Fist && thalmicMyo.pose == lastPose) {
+				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 				// pass the myo and the gyroReset to the movement calculation method
 				CalculateMovement(thalmicMyo, gyroReset);
 			} else if(thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
+				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 				// move down through the enum 
 				cycleEnum(0);
 			} else if(thalmicMyo.pose == Pose.WaveOut && thalmicMyo.pose != lastPose) {
+				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 				// move up through the enum
 				cycleEnum(1);
 			} else if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
+				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 				// ask the user if the would like to exit
 				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit Select Mode.");
 			} else if(lastPose == Pose.FingersSpread) {
+				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 				// exit Select Mode
 				CreateMode();
 			} else if(thalmicMyo.pose == Pose.DoubleTap && thalmicMyo.pose != lastPose) {
+				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 				// ask the user if the would like to delete the object
 				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Double-Tap gesture to Delete selected object.");
 			} else if(lastPose == Pose.DoubleTap) {
