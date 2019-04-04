@@ -19,7 +19,7 @@ public class MenuMode : MonoBehaviour {
 		get { return locked; }
 		set { locked = value; }
 	}// lock accesssor
-	SceneState ss = SceneState.getInstance;
+	SceneState ss;
 	private Pose lastPose;// Pose object to track last pose
 	public Canvas gameUI;// Canvas object
 
@@ -31,6 +31,7 @@ public class MenuMode : MonoBehaviour {
 	public Material highlight;
 
 	void Start() {
+		ss = SceneState.getInstance;
 		GameObject[] buttons = GameObject.FindGameObjectsWithTag("button"); // Find all button objects 
 		UIButtons = new Button[buttons.Length];// Setting the size of the array of buttons 
 		Debug.Log(buttons.Length);
