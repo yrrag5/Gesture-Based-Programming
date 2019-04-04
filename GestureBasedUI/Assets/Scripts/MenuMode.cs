@@ -41,7 +41,10 @@ public class MenuMode : MonoBehaviour {
 			// myo = GameObject.FindGameObjectWithTag("myo");
 			// Access the ThalmicMyo component attached to the Myo object.
         	ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo>();
-			
+			/* if the fist pose is detected and was the last pose
+			else if(thalmicMyo.pose == Pose.CloseFist != lastPose) {
+				Close fist will bring up settings menu to display controls of myo gestures
+				} */
 			// if the fist pose is detected and was the last pose
 			if(thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
 				// move down through the button array 
@@ -52,7 +55,6 @@ public class MenuMode : MonoBehaviour {
 				// move up through the button array
 				selected = getNextButton(1);
 				// Highlights selected button with colour ...
-				
 
 			} else if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
 				// ask the user if the would like to exit
@@ -64,21 +66,40 @@ public class MenuMode : MonoBehaviour {
 				// get name of the button to access functionality 
 				string bName = UIButtons[selectedButton].ToString();
 				// If the button is an object to instanciate, pass it to the select mode
+				if(bName.Equals("CubeObject")){
 					// Instanciate object at position of danger zone
 					// Add that object to the scene state
-					// Pass selectmode the object and its position in the scene state array 
+					// Pass selectmode the object and its position in the scene state array
+				}
+				if(bName.Equals("CuboidObject")){
+					// Instanciate object at position of danger zone
+					// Add that object to the scene state
+					// Pass selectmode the object and its position in the scene state array
+				}
+				if(bName.Equals("CylinderObject")){
+					// Instanciate object at position of danger zone
+					// Add that object to the scene state
+					// Pass selectmode the object and its position in the scene state array
+				}
+					 
 				// If the button is continue, enter create mode 
-
+				if(bName.Equals("Continue")){
+					CreateMode();
+				}
 				// If the button is load, enter the load ui
+				if(bName.Equals("LoadScene")){
+					LoadUi();
+				}
 
 				// If the button is save, save current state
-
+				if(bName.Equals("SaveScene")){
+					SaveUi();
+				}
 				// If the button is exit
 				if(bName.Equals("Exit")){
 					Exit();					
 				}
 			}// if/else if
-
 
 			// update the last pose detected
 			lastPose = thalmicMyo.pose;
@@ -130,6 +151,12 @@ public class MenuMode : MonoBehaviour {
 		this.locked = true;
 	}// CreateMode
 
+	public void SaveUi(){
+
+	}
+	public void LoadUi(){
+
+	}
 	public void Exit() {
         // gets a handle on the singleton instance
         modes = Modes.getInstance;
