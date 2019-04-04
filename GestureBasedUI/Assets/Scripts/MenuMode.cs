@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
 
 using LockingPolicy = Thalmic.Myo.LockingPolicy;
 using Pose = Thalmic.Myo.Pose;
@@ -49,12 +51,23 @@ public class MenuMode : MonoBehaviour {
 			if(thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
 				// move down through the button array 
 				selected = getNextButton(0);
-				// Highlights selected button with colour ...
+				// Highlights selected button with color ...
+				// selected button highlighted red  
+				ColorBlock buttonCol = selectedButton.colors;
+         		buttonCol.normalColor = Color.red;
+         		buttonCol.highlightedColor = new Color32(255, 100, 100, 255);
+         		selectedButton.colors = buttonCol;
+
 				
 			} else if(thalmicMyo.pose == Pose.WaveOut && thalmicMyo.pose != lastPose) {
 				// move up through the button array
 				selected = getNextButton(1);
 				// Highlights selected button with colour ...
+				// selected button highlighted red  
+				ColorBlock buttonCol = selectedButton.buttonCol;
+         		buttonCol.normalColor = Color.red;
+         		buttonCol.highlightedColor = new Color32(255, 100, 100, 255);
+         		selectedButton.buttonCol = buttonCol;
 
 			} else if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
 				// ask the user if the would like to exit
@@ -70,6 +83,7 @@ public class MenuMode : MonoBehaviour {
 					// Instanciate object at position of danger zone
 					// Add that object to the scene state
 					// Pass selectmode the object and its position in the scene state array
+					//SetSelected();
 				}
 				if(bName.Equals("CuboidObject")){
 					// Instanciate object at position of danger zone

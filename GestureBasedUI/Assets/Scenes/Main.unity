@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 91068215}
   m_Layer: 0
   m_Name: CylinderObject
-  m_TagString: Untagged
+  m_TagString: button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1872,7 +1872,7 @@ GameObject:
   - component: {fileID: 1220035551}
   m_Layer: 0
   m_Name: CuboidObject
-  m_TagString: Untagged
+  m_TagString: button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2327,7 +2327,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1358559874
 Transform:
   m_ObjectHideFlags: 0
@@ -2799,6 +2799,8 @@ MonoBehaviour:
   myo: {fileID: 1669989256}
   gameUI: {fileID: 1533845799}
   UIButtons: []
+  selectedButton: 0
+  selected: {fileID: 0}
 --- !u!1 &1935365871
 GameObject:
   m_ObjectHideFlags: 0
@@ -3126,7 +3128,7 @@ GameObject:
   - component: {fileID: 2118780415}
   m_Layer: 0
   m_Name: CubeObject
-  m_TagString: Untagged
+  m_TagString: button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
