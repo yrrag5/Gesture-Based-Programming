@@ -95,10 +95,9 @@ public class CreateMode : MonoBehaviour {
 					SelectMode();
 			}
 
-			lastPose = thalmicMyo.pose;
-
+			lastPose = thalmicMyo.pose;			
 		}// if
-
+		
 	}// Update
 
 	// ----- MODE FUNCTIONALITY -----
