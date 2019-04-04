@@ -46,7 +46,7 @@ public class SceneState : MonoBehaviour {
 		temp[ArrayLength()] = newObject;
 		// set the objects array to the new array
 		objects = temp;
-		Debug.Log("Object number " + ArrayLength() + " added!");
+		// Debug.Log("Object number " + ArrayLength() + " added!");
 	}// AddGameObject
 
 	public void RemoveGameObject(int index) {
@@ -66,6 +66,7 @@ public class SceneState : MonoBehaviour {
 
 	public GameObject[] getObjects() {
 		return objects;
+
 	}// getObjects
 
 	public GameObject getObject(int index) {

@@ -7,6 +7,8 @@ TagManager:
   - Tests
   - SpawnPoint
   - UserInterface
+  - myo
+  - button
   layers:
   - Default
   - TransparentFX
