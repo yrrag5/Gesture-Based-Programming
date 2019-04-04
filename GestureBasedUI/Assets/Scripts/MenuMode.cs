@@ -27,6 +27,8 @@ public class MenuMode : MonoBehaviour {
 
 	public int selectedButton = 0;
 	public Button selected;
+	public Material shapecolor;
+	public Material highlight;
 
 	void Start() {
 		GameObject[] buttons = GameObject.FindGameObjectsWithTag("button"); // Find all button objects 
@@ -34,6 +36,7 @@ public class MenuMode : MonoBehaviour {
 		Debug.Log(buttons.Length);
 		for(int i = 0; i < buttons.Length; i++)
 			UIButtons[i] = buttons[i].GetComponent<Button>();	
+		ToggleHighlight();
 	}
 
 	void Update(){
@@ -51,24 +54,13 @@ public class MenuMode : MonoBehaviour {
 			if(thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
 				// move down through the button array 
 				selected = getNextButton(0);
-				// Highlights selected button with color ...
-				// selected button highlighted red  
-				ColorBlock buttonCol = selectedButton.colors;
-         		buttonCol.normalColor = Color.red;
-         		buttonCol.highlightedColor = new Color32(255, 100, 100, 255);
-         		selectedButton.colors = buttonCol;
-
-				
+				// Highlights selected button
+				ToggleHighlight();
 			} else if(thalmicMyo.pose == Pose.WaveOut && thalmicMyo.pose != lastPose) {
 				// move up through the button array
 				selected = getNextButton(1);
-				// Highlights selected button with colour ...
-				// selected button highlighted red  
-				ColorBlock buttonCol = selectedButton.buttonCol;
-         		buttonCol.normalColor = Color.red;
-         		buttonCol.highlightedColor = new Color32(255, 100, 100, 255);
-         		selectedButton.buttonCol = buttonCol;
-
+				// Highlights selected button
+				ToggleHighlight();
 			} else if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
 				// ask the user if the would like to exit
 				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit application.");
@@ -76,24 +68,33 @@ public class MenuMode : MonoBehaviour {
 				// exit the application
 				Exit();
 			} else if(lastPose == Pose.DoubleTap) {
+				ToggleHighlight();
 				// get name of the button to access functionality 
 				string bName = UIButtons[selectedButton].ToString();
 				// If the button is an object to instanciate, pass it to the select mode
 				if(bName.Equals("CubeObject")){
 					// Instanciate object at position of danger zone
+					GameObject g = (GameObject)Instantiate(Resources.Load("Cube"), GameObject.FindWithTag("SpawnPoint").transform.position, Quaternion.identity);
 					// Add that object to the scene state
+					ss.AddGameObject(g);
 					// Pass selectmode the object and its position in the scene state array
-					//SetSelected();
+					SelectMode(g,ss.ArrayLength());
 				}
 				if(bName.Equals("CuboidObject")){
 					// Instanciate object at position of danger zone
+					GameObject g = (GameObject)Instantiate(Resources.Load("Cuboid"), GameObject.FindWithTag("SpawnPoint").transform.position, Quaternion.identity);
 					// Add that object to the scene state
+					ss.AddGameObject(g);
 					// Pass selectmode the object and its position in the scene state array
+					SelectMode(g,ss.ArrayLength());
 				}
 				if(bName.Equals("CylinderObject")){
 					// Instanciate object at position of danger zone
+					GameObject g = (GameObject)Instantiate(Resources.Load("Cylinder"), GameObject.FindWithTag("SpawnPoint").transform.position, Quaternion.identity);
 					// Add that object to the scene state
+					ss.AddGameObject(g);
 					// Pass selectmode the object and its position in the scene state array
+					SelectMode(g,ss.ArrayLength());
 				}
 					 
 				// If the button is continue, enter create mode 
@@ -139,6 +140,15 @@ public class MenuMode : MonoBehaviour {
 		return UIButtons[selectedButton];
 	}//GetNextButton
 
+	public void ToggleHighlight() {
+		// If material is highlighted.
+		if (selected.GetComponent<Renderer>().material == highlight)
+			selected.GetComponent<Renderer>().material = shapecolor;
+		else { // otherwise, store the material and then change to highlighted.
+			shapecolor = selected.GetComponent<Renderer>().material;
+			selected.GetComponent<Renderer>().material = highlight;
+		}
+	}
 	public void CreateMode() {
         // gets a handle on the singleton instance
         modes = Modes.getInstance;
