@@ -587,6 +587,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrayLength: 0
   arrayIndex: 0
+  shapecolor: {fileID: 0}
+  highlight: {fileID: 2100000, guid: 3f8334674336e6a45b22d7328e7008ae, type: 2}
   myo: {fileID: 1993222934}
 --- !u!1 &402123785
 GameObject:
