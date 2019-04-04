@@ -17,6 +17,8 @@ public class CreateMode : MonoBehaviour {
 	public int arrayIndex;
 	public Material shapecolor;
 	public Material highlight;
+	public Canvas gameUI;
+
 
 	// Myo variables.
 	public GameObject myo = null;
@@ -60,26 +62,29 @@ public class CreateMode : MonoBehaviour {
 
 			// Update references when the pose becomes fingers spread or the q key is pressed.
 			// if pose == whatever && != lastpose
-			if (thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
-				lastPose = thalmicMyo.pose;
+ 			if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
+				// ask the user if the would like to exit
+	//			gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit to Menu.");
+			}
+			else if (lastPose == Pose.FingersSpread) {
 				Debug.Log("create mode - Finger Spread");
 				MenuMode();
 			}
 			else if (thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
-				lastPose = thalmicMyo.pose;
 				Debug.Log("create mode - Wave in");
 				ParseLeft(arrayIndex);
 			}
 			else if (thalmicMyo.pose == Pose.WaveOut && thalmicMyo.pose != lastPose) {
-				lastPose = thalmicMyo.pose;
 				Debug.Log("create mode - Wave out");
 				ParseRight(arrayIndex);
 			}
 			else if (thalmicMyo.pose == Pose.DoubleTap && thalmicMyo.pose != lastPose) {
-				lastPose = thalmicMyo.pose;
 				Debug.Log("create mode - Double Tap");
 				SelectMode();
 			}
+
+			lastPose = thalmicMyo.pose;
+
 		}// if
 
 	}// Update
