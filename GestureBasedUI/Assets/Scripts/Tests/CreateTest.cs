@@ -40,7 +40,7 @@ public class CreateTest : MonoBehaviour {
 
 	void ParseLeft (int arrayIndex) {
 		// Get rid of highlight on current GameObject.
-		ToggleHighlight();
+		HighlightMaterial();
 		// Select GameObject by decrementing index of array by 1.
 		// if index == 0, select the last GameObject in array.
 		if (arrayIndex == 0) 
@@ -53,12 +53,12 @@ public class CreateTest : MonoBehaviour {
 		// Need code for camera.
 
 		// Highlight the newly selected shape.
-		ToggleHighlight();		
+		HighlightMaterial();		
 	}
 
 	void ParseRight (int arrayIndex) {
 		// Get rid of highlight on current GameObject.
-		ToggleHighlight();
+		HighlightMaterial();
 
 		// Select GameObject by incrementing index of array by 1.
 		// if index == array.length - 1, select the first GameObject in array.
@@ -72,16 +72,16 @@ public class CreateTest : MonoBehaviour {
 		// Need code for camera.
 
 		// Highlight the newly selected shape.
-		ToggleHighlight();	
+		HighlightMaterial();	
 	}
 
 	void ReturnToMenu() {
 		// Get rid of highlight on current GameObject.
-		ToggleHighlight();
+		HighlightMaterial();
 		// Change back to menu mode.
 	}
 
-	void ToggleHighlight() {
+	void HighlightMaterial() {
 		// Toggle between highlighted and not.
 		if (selected.GetComponent<Renderer>().material.color == Color.white) 
 			selected.GetComponent<Renderer>().material.color = Color.red;

@@ -12,7 +12,7 @@ public class CreateMode : MonoBehaviour {
 	// Global variables.
 	public static Modes modes;
 	private SceneState sceneState;
-	private GameObject selected;
+	public GameObject selected;
 	public int arrayLength;
 	public int arrayIndex;
 	private Material shapecolor;
@@ -22,6 +22,7 @@ public class CreateMode : MonoBehaviour {
 	// Myo variables.
 	public GameObject myo = null;
 	private Pose lastPose = Pose.Unknown;
+	private bool isExiting = false;
 
 	// Lock.
 	private bool locked = true;
@@ -47,7 +48,7 @@ public class CreateMode : MonoBehaviour {
 			Debug.Log("Object array is empty");
 			arrayIndex = 1;
 		}
-	}
+	}// Start
 
 	void Update() {
 		// If the class is not locked out.
@@ -58,7 +59,7 @@ public class CreateMode : MonoBehaviour {
 			if(selected != null && sceneState.ArrayLength() >= 0) {
 				arrayLength = sceneState.ArrayLength();
 				FocusSelected();
-				Debug.Log("CreateMode Unlocked");
+				// Debug.Log("CreateMode Unlocked");
 
 				// Detect Myo gestures (left, right, close, exit).
 				// Access the ThalmicMyo component attached to the Myo object.
@@ -66,66 +67,55 @@ public class CreateMode : MonoBehaviour {
 
 				// Update references when the pose becomes fingers spread or the q key is pressed.
 				// if pose == whatever && != lastpose
-				if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
+				if (thalmicMyo.pose == Pose.FingersSpread && isExiting) {
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
+					MenuMode();
+				}
+				else if(thalmicMyo.pose == Pose.FingersSpread) {
+					isExiting = true;
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 					// Ask the user if they want to exit to menu.
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit to Menu.");
 				}
-				else if (lastPose == Pose.FingersSpread) {
-					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-					Debug.Log("create mode - Finger Spread");
-					MenuMode();
-				}
 				else if (thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-					Debug.Log("create mode - Wave in");
+					// Debug.Log("create mode - Wave in");
 					if (arrayIndex == -1)
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Object array is empty! Please create objects.");
 					else 
-						ParseLeft(arrayIndex);
+						ParseLeft();
 				}
 				else if (thalmicMyo.pose == Pose.WaveOut && thalmicMyo.pose != lastPose) {
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-					Debug.Log("create mode - Wave out");
+					// Debug.Log("create mode - Wave out");
 					if (arrayIndex == -1)
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Object array is empty! Please create objects.");
 					else 
-						ParseRight(arrayIndex);
+						ParseRight();
+				}
+				else if (thalmicMyo.pose == Pose.DoubleTap) {
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Double-tap to enter select mode.");
 				}
 				else if (thalmicMyo.pose == Pose.DoubleTap && thalmicMyo.pose != lastPose) {
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-					Debug.Log("create mode - Double Tap");
+					// Debug.Log("create mode - Double Tap");
 					if (arrayIndex == -1)
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Object array is empty! Please create objects.");
 					else 
 						SelectMode();
 				}
-				/*
-				if (Input.GetKeyDown ("c")) {
-            	// cycle through the objects
-					CycleIndex();
-        		}
-				*/
+
+				if(thalmicMyo.pose != Pose.FingersSpread) isExiting = false;
+
 				lastPose = thalmicMyo.pose;			
 			}// if
-		}// if
-		
+		}// if	
 	}// Update
-	/* 
-	void CycleIndex(){
-		if(sceneState.ArrayLength()-2 < arrayIndex || arrayIndex < 0)
-			arrayIndex = 0;
-		else
-			arrayIndex = arrayIndex +1;
 
-		selected = sceneState.getObject(arrayIndex);
-		FocusSelected();
-	}
-	*/
 	// ----- MODE FUNCTIONALITY -----
-	void ParseLeft (int arrayIndex) {
+	void ParseLeft() {
 		// Get rid of highlight on current GameObject.
-		ToggleHighlight();
+		OriginalMaterial();
 		// Select GameObject by decrementing index of array by 1.
 		// if index == 0, select the last GameObject in array.
 		if (arrayIndex == 0) {
@@ -140,13 +130,12 @@ public class CreateMode : MonoBehaviour {
 		// Focus camera on object.
 		FocusSelected();
 		// Highlight the newly selected shape.
-		ToggleHighlight();		
-	}
+		HighlightMaterial();		
+	}// ParseLeft
 
-	void ParseRight (int arrayIndex) {
-		Debug.Log("*******" + arrayIndex);
+	void ParseRight() {
 		// Get rid of highlight on current GameObject.
-		ToggleHighlight();
+		OriginalMaterial();
 
 		// Select GameObject by incrementing index of array by 1.
 		// if index == array.length - 1, select the first GameObject in array.
@@ -162,8 +151,8 @@ public class CreateMode : MonoBehaviour {
 		// Focus camera on object.
 		FocusSelected();
 		// Highlight the newly selected shape.
-		ToggleHighlight();
-	}
+		HighlightMaterial();
+	}// ParseRight
 
 	// Focus camera on selected object.
 	public void FocusSelected(){
@@ -171,24 +160,23 @@ public class CreateMode : MonoBehaviour {
 		LookAt lookAt = (LookAt)FindObjectOfType(typeof(LookAt));
 		// passing the selected objects transform to the LookAt script
 		lookAt.Focus(selected.transform.position);
-	}
+	}// FocusSelected
 
-	public void ToggleHighlight() {
-		// If material is highlighted.
-		if (selected.GetComponent<Renderer>().material == highlight)
-			selected.GetComponent<Renderer>().material = shapecolor;
-		else { // otherwise, store the material and then change to highlighted.
-			shapecolor = selected.GetComponent<Renderer>().material;
-			selected.GetComponent<Renderer>().material = highlight;
-		}
-	}
+	public void HighlightMaterial() {
+		shapecolor = selected.GetComponent<Renderer>().material;
+		selected.GetComponent<Renderer>().material = highlight;
+	}// HighlightMaterial
+
+	public void OriginalMaterial(){
+		selected.GetComponent<Renderer>().material = shapecolor;
+	}// OriginalMaterials
 
 	// ----- MODE CHANGING METHODS -----
 	public void MenuMode() {
+		gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 		// Get rid of highlight on current GameObject.
-		ToggleHighlight();
+		HighlightMaterial();
 		// Change back to menu mode.
-
 		// Gets a handle on the singleton instance.
 		modes = Modes.getInstance;
 		// Change the mode.
@@ -201,6 +189,7 @@ public class CreateMode : MonoBehaviour {
 	}// CreateMode
 
 	public void SelectMode() {
+		gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 		// Pass selected game object to SelectMode script.
 	 	SelectMode sm = GameObject.FindObjectOfType<SelectMode>();
 	  	sm.SetSelected(selected, arrayIndex);

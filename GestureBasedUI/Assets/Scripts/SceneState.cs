@@ -66,8 +66,11 @@ public class SceneState : MonoBehaviour {
 
 	public GameObject[] getObjects() {
 		return objects;
-
 	}// getObjects
+
+	public void setObjects(GameObject[] g){
+		objects = g;
+	}// setObjects
 
 	public GameObject getObject(int index) {
 		if(ArrayLength() > index) {

@@ -70,7 +70,7 @@ public class ThalmicMyo : MonoBehaviour {
     void Update() {
         lock (_lock) {
             armSynced = _myoArmSynced;
-            Debug.Log(armSynced);
+            // Debug.Log(armSynced);
 
             arm = _myoArm;
             xDirection = _myoXDirection;
@@ -86,9 +86,9 @@ public class ThalmicMyo : MonoBehaviour {
             pose = _myoPose;
             unlocked = _myoUnlocked;
 
-            Vibrate(VibrationType.Long);
+            // Vibrate(VibrationType.Short);
 
-            Debug.Log(pose.ToString());
+            // Debug.Log(pose.ToString());
         }
     }
 

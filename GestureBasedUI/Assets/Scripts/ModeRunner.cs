@@ -41,8 +41,12 @@ public class ModeRunner : MonoBehaviour {
 					// or could use the singleton design pattern here?
 					CreateMode cm = GameObject.FindObjectOfType<CreateMode>();
 					cm.Locked = false;
-					// Toggle selected highlight
-					cm.ToggleHighlight();
+					// sceneState instance
+					SceneState ss = SceneState.getInstance;
+					// set selected if possible
+					if(ss.ArrayLength() > 0)cm.selected = ss.getObject(ss.ArrayLength()-1);
+					// Toggle selected highlight if possible
+					if(cm.selected != null) cm.HighlightMaterial();
 					break;
 				case Modes.Mode.Select:
 					// hide the user interface
@@ -64,8 +68,6 @@ public class ModeRunner : MonoBehaviour {
 					// singleton would show UI when accessed and hide on exit
 					MenuMode mm = GameObject.FindObjectOfType<MenuMode>();
 					mm.Locked = false;
-					// Toggle selected highlight
-					mm.ToggleHighlight();
 					break;
 				default:
 					locked = false;
