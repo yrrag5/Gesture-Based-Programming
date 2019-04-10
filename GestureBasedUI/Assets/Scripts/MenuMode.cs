@@ -34,11 +34,12 @@ public class MenuMode : MonoBehaviour {
 		ss = SceneState.getInstance;
 		GameObject[] buttons = GameObject.FindGameObjectsWithTag("button"); // Find all button objects 
 		UIButtons = new Button[buttons.Length];// Setting the size of the array of buttons 
-		Debug.Log(buttons.Length);
+		// Debug.Log(buttons.Length);
 		for(int i = 0; i < buttons.Length; i++)
 			UIButtons[i] = buttons[i].GetComponent<Button>();	
-		selected = UIButtons[0];
-		ToggleHighlight();
+		// selected = UIButtons[0];
+		// Debug.Log(selected.name.ToString());
+		// ToggleHighlight();
 	}
 
 	void Update(){
@@ -63,14 +64,14 @@ public class MenuMode : MonoBehaviour {
 				selected = getNextButton(1);
 				// Highlights selected button
 				ToggleHighlight();
-			} else if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
+			} /*else if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
 				// ask the user if the would like to exit
 				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit application.");
-			} else if(lastPose == Pose.FingersSpread) {
+			} */else if(lastPose == Pose.FingersSpread) {
 				// exit the application
 				Exit();
 			} else if(lastPose == Pose.DoubleTap) {
-				ToggleHighlight();
+				// ToggleHighlight();
 				// get name of the button to access functionality 
 				string bName = UIButtons[selectedButton].ToString();
 				// If the button is an object to instanciate, pass it to the select mode
@@ -127,14 +128,14 @@ public class MenuMode : MonoBehaviour {
 	public Button getNextButton(int direction){
 		// If the direction is 1 change is positive, else negative
 		if(direction == 1){
-			if(selectedButton == UIButtons.Length)
+			if(selectedButton == UIButtons.Length -1)
 				selectedButton = 0;
 			else
 				selectedButton++;		
 		}//if
 		else{
 			if(selectedButton == 0)
-				selectedButton = UIButtons.Length;
+				selectedButton = UIButtons.Length -1;
 			else
 				selectedButton--;	
 		}//else
@@ -151,6 +152,7 @@ public class MenuMode : MonoBehaviour {
 			selected.GetComponent<Image>().material = highlight;
 		}
 	}
+
 	public void CreateMode() {
         // gets a handle on the singleton instance
         modes = Modes.getInstance;
@@ -158,9 +160,9 @@ public class MenuMode : MonoBehaviour {
         modes.mode = Modes.Mode.Create;
 		// open the lock on the runner
 		ModeRunner mr = GameObject.FindObjectOfType<ModeRunner>();
-		mr.Locked = false;
 		// close the lock here
 		this.locked = true;
+		mr.Locked = false;
 	}// CreateMode
 
 	public void SelectMode(GameObject g, int index) {
@@ -172,9 +174,9 @@ public class MenuMode : MonoBehaviour {
         modes.mode = Modes.Mode.Select;
 		// open the lock on the runner
 		ModeRunner mr = GameObject.FindObjectOfType<ModeRunner>();
-		mr.Locked = false;
 		// close the lock here
 		this.locked = true;
+		mr.Locked = false;
 	}// CreateMode
 
 	public void SaveUi(){

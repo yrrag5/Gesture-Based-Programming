@@ -43,7 +43,7 @@ public class SelectMode : MonoBehaviour {
 				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 				// move up through the enum
 				cycleEnum(1);
-			} else if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
+			} /*else if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
 				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 				// ask the user if the would like to exit
 				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit Select Mode.");
@@ -51,14 +51,14 @@ public class SelectMode : MonoBehaviour {
 				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 				// exit Select Mode
 				CreateMode();
-			} else if(thalmicMyo.pose == Pose.DoubleTap && thalmicMyo.pose != lastPose) {
+			}  else if(thalmicMyo.pose == Pose.DoubleTap && thalmicMyo.pose != lastPose) {
 				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 				// ask the user if the would like to delete the object
 				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Double-Tap gesture to Delete selected object.");
 			} else if(lastPose == Pose.DoubleTap) {
 				DeleteSelected();
 			}// if/else if
-
+			*/
 			if(thalmicMyo.pose != Pose.Fist) gyroReset = true;// reset the gyro control
 
 			// update the last pose detected
@@ -96,6 +96,7 @@ public class SelectMode : MonoBehaviour {
 	}// ToggleSelectedRigidbody
 
 	public void CalculateMovement(ThalmicMyo tm, bool gyroReset) {
+		Debug.Log(tm.gyroscope.y);
 		float movementDegree = 0;
 		// get the current gyro Y value
 		if(gyroReset){
@@ -106,17 +107,29 @@ public class SelectMode : MonoBehaviour {
 		}// if 
 		
 		// if there has been no change to the gyro zero the degree of movement, otherwise
-		if(baseGyroY - tm.gyroscope.y == 0.000000) movementDegree = 0;// zero the movement degree
-		else movementDegree = (tm.gyroscope.y - baseGyroY) / 150;// accessing the gyro y value /150	
+		if(baseGyroY - tm.gyroscope.y == 0.000000) 
+			movementDegree = 0;// zero the movement degree
+		else 
+			movementDegree = (tm.gyroscope.y - baseGyroY) / 150;// accessing the gyro y value /150	
 
 		// set the new translate vector
 		Vector3 acc = new Vector3(movementDegree, 0, movementDegree);
 		// speed control
 		float speed = 0.8f;
+
+		Debug.Log(current);
+
 		// translate the position of the selected object
-		if(current == Axis.X) selected.transform.Translate(acc.x * speed, 0, 0);
-		else if(current == Axis.Y) selected.transform.Translate(0, acc.x * speed, 0);
-		else if(current == Axis.Z) selected.transform.Translate(0, 0, acc.x * speed);
+		if(current == Axis.X) {
+			selected.transform.Translate(acc.x * speed, 0, 0);
+			Debug.Log("Axis: " + acc.x);
+		}else if(current == Axis.Y){ 
+			Debug.Log("Axis: " + acc.x);
+			selected.transform.Translate(0, acc.x * speed, 0);
+		}else if(current == Axis.Z){
+			Debug.Log("Axis: " + acc.x);
+			selected.transform.Translate(0, 0, acc.x * speed);
+		}	
 	}// MoveObject
 
 	public void cycleEnum(int direction) {

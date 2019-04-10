@@ -86,6 +86,8 @@ public class ThalmicMyo : MonoBehaviour {
             pose = _myoPose;
             unlocked = _myoUnlocked;
 
+            Vibrate(VibrationType.Long);
+
             Debug.Log(pose.ToString());
         }
     }

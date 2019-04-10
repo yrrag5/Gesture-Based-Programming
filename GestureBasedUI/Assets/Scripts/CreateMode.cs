@@ -45,9 +45,8 @@ public class CreateMode : MonoBehaviour {
 		}
 		else {
 			Debug.Log("Object array is empty");
-			arrayIndex = -1;
+			arrayIndex = 1;
 		}
-		Debug.Log(selected);
 	}
 
 	void Update() {
@@ -56,7 +55,8 @@ public class CreateMode : MonoBehaviour {
 			if(selected == null && sceneState.ArrayLength() >= 0)
 				selected = sceneState.getObject(0);
 			
-			if(selected != null) {
+			if(selected != null && sceneState.ArrayLength() >= 0) {
+				arrayLength = sceneState.ArrayLength();
 				FocusSelected();
 				Debug.Log("CreateMode Unlocked");
 
@@ -144,6 +144,7 @@ public class CreateMode : MonoBehaviour {
 	}
 
 	void ParseRight (int arrayIndex) {
+		Debug.Log("*******" + arrayIndex);
 		// Get rid of highlight on current GameObject.
 		ToggleHighlight();
 
@@ -154,7 +155,7 @@ public class CreateMode : MonoBehaviour {
 			selected = sceneState.getObject(arrayIndex);
 		}
 		else {
-			arrayIndex += 1;
+			arrayIndex = arrayIndex + 1;
 			selected = sceneState.getObject(arrayIndex);
 		}
 

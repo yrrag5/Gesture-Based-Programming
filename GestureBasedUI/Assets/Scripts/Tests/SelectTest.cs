@@ -27,7 +27,7 @@ public class SelectTest : MonoBehaviour {
 
 		if (Input.GetKeyDown ("c")) {
             // cycle through the objects
-	//		CycleIndex();
+		CycleIndex();
         }
 
 		if(sceneState.ArrayLength() > 0){

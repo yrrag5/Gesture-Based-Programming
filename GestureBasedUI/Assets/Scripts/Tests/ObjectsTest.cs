@@ -14,7 +14,8 @@ public class ObjectsTest : MonoBehaviour {
 		// iterate over each child object and add them to the scene state
 		foreach (Transform item in parent.transform)
       	{
-        	  sceneState.AddGameObject(item.gameObject);
+			//Debug.Log(sceneState.ArrayLength());
+        	sceneState.AddGameObject(item.gameObject);
       	}// foreach
 	}// Start
 	
