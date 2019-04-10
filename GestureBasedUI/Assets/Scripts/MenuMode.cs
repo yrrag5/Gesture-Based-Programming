@@ -141,12 +141,10 @@ public class MenuMode : MonoBehaviour {
 			}// if
 
 			if(thalmicMyo.pose == Pose.Rest && allowAccess == false) { 
-				Debug.Log("Allowing access.");
 				allowAccess = true;
 				HighlightMaterial();
 			}
-		}// if
-		else allowAccess = false;
+		} else allowAccess = false;
 	}// Update
 
 	public Button getNextButton(int direction){

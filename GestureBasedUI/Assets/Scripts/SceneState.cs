@@ -52,16 +52,21 @@ public class SceneState : MonoBehaviour {
 	public void RemoveGameObject(int index) {
 		int count = 0;
 		// create a new array with one less space for another element
-		GameObject[] temp = new GameObject[ArrayLength() - 1];
+		GameObject[] temp = new GameObject[objects.Length - 1];
 		// copy the contents of the objects array, excluding the index, into the new array
-		for(int i = 0; i < ArrayLength(); i++) {
+		for(int i = 0; i < objects.Length; i++) {
 			if(i != index) {
 				temp[count] = objects[i];
 				count++;
-			}// if
+			} else {
+				// delete the object from the scene
+				Destroy(objects[i]);
+			}
 		}// for
 		// set the objects array to the new array
+		objects = new GameObject[temp.Length];
 		objects = temp;
+		Debug.Log(ArrayLength());
 	}// RemoveGameObject
 
 	public GameObject[] getObjects() {

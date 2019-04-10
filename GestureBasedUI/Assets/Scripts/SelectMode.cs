@@ -15,6 +15,9 @@ public class SelectMode : MonoBehaviour {
 		set { locked = value; }
 	}// lock accesssor
 	private bool inDelete = false;
+	private bool isExiting = false;
+	private bool allowAccess = false;
+	private int consecutive = 0;
 	private bool gyroReset = true;// gyro reset control
 	private float baseGyroY;// Y Gyro value placeholder
 	private GameObject selected;// selected gameobject
@@ -28,42 +31,66 @@ public class SelectMode : MonoBehaviour {
 		// if the class is not locked out
 		if(!locked){
 			FocusSelected();
-
-			myo = GameObject.FindGameObjectWithTag("myo");
+			// myo = GameObject.FindGameObjectWithTag("myo");
 			// Access the ThalmicMyo component attached to the Myo object.
         	ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo>();
+			
+			if(isExiting) {
+				if(thalmicMyo.pose == Pose.FingersSpread) {
+					consecutive++;// increment the counter
+				} else if(consecutive > 30) {
+					isExiting = false;
+					CreateMode();// exit to create mode
+				} else if(thalmicMyo.pose != Pose.Rest){
+					isExiting = false;// stop exiting
+					consecutive = 0;// reset counter
+				}// if/else if...
+			} if(inDelete) {
+				if(thalmicMyo.pose == Pose.DoubleTap) {
+					consecutive++;// increment the counter
+				} else if(consecutive > 30 && lastPose == Pose.DoubleTap) {
+					inDelete = false;
+					DeleteSelected();
+				} else if(thalmicMyo.pose != Pose.Rest) {
+					inDelete = false;// stop exiting
+					consecutive = 0;// reset counter
+				}// if/else if...
+				// update the last pose detected
+				lastPose = thalmicMyo.pose;
+			} else if(allowAccess){
+				if(thalmicMyo.pose != Pose.DoubleTap) inDelete = false;// reset the deletion access
 
-			// if the fist pose is detected and was the last pose
-			if(thalmicMyo.pose == Pose.Fist && thalmicMyo.pose == lastPose) {
-				// pass the myo and the gyroReset to the movement calculation method
-				CalculateMovement(thalmicMyo);
-			} else if(thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
-				// move down through the enum 
-				cycleEnum(0);
-			} else if(thalmicMyo.pose == Pose.WaveOut && thalmicMyo.pose != lastPose) {
-				// move up through the enum
-				cycleEnum(1);
-			} else if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
-				// ask the user if the would like to exit
-				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit Select Mode.");
-			} else if(lastPose == Pose.FingersSpread) {
-				// exit Select Mode
-				CreateMode();
-			} else if(thalmicMyo.pose == Pose.DoubleTap && thalmicMyo.pose != lastPose) {
-				inDelete = true;
-				// ask the user if the would like to delete the object
-				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Double-Tap gesture to Delete selected object.");
-			} else if(thalmicMyo.pose == Pose.DoubleTap && inDelete) {
-				// DeleteSelected();
+				// if the fist pose is detected and was the last pose
+				if(thalmicMyo.pose == Pose.Fist && thalmicMyo.pose == lastPose) {
+					// pass the myo and the gyroReset to the movement calculation method
+					CalculateMovement(thalmicMyo);
+				} else if(thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
+					// move down through the enum 
+					cycleEnum(0);
+				} else if(thalmicMyo.pose == Pose.WaveOut && thalmicMyo.pose != lastPose) {
+					// move up through the enum
+					cycleEnum(1);
+				} else if(thalmicMyo.pose == Pose.FingersSpread && thalmicMyo.pose != lastPose) {
+					isExiting = true;
+					// ask the user if the would like to exit
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit Select Mode.");
+				} else if(thalmicMyo.pose == Pose.DoubleTap && thalmicMyo.pose != lastPose) {
+					inDelete = true;
+					// ask the user if the would like to delete the object
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Double-Tap gesture to Delete selected object.");
+				}
+
+				if(thalmicMyo.pose != Pose.Fist) gyroReset = true;// reset the gyro control
+
+				// update the last pose detected
+				lastPose = thalmicMyo.pose;
 			}// if/else if
 
-			if(thalmicMyo.pose != Pose.Fist) gyroReset = true;// reset the gyro control
-
-			if(thalmicMyo.pose != Pose.DoubleTap) inDelete = false;// reset the deletion access
-
-			// update the last pose detected
-			lastPose = thalmicMyo.pose;
-		}// if
+			if(thalmicMyo.pose == Pose.Rest && allowAccess == false) { 
+					allowAccess = true;
+				}// if	
+			
+		} else allowAccess = false;	
 	}// Update
 
 	public void SetSelected(GameObject g, int index){
@@ -145,6 +172,7 @@ public class SelectMode : MonoBehaviour {
 	}// DeleteSelected
 
 	public void CreateMode() {
+		allowAccess = false;
 		gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 		// disable the axis text UI
 		gameUI.gameObject.GetComponent<UpdateGameUI>().ToggleAxisText(false);
