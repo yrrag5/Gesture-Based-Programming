@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using System.IO;
 
 using LockingPolicy = Thalmic.Myo.LockingPolicy;
 using Pose = Thalmic.Myo.Pose;
@@ -20,8 +20,9 @@ public class MenuMode : MonoBehaviour {
 		set { locked = value; }
 	}// lock accesssor
 	SceneState ss;
-	private Pose lastPose;// Pose object to track last pose
-	public Canvas gameUI;// Canvas object
+	SaveSystem saveSys;
+	private Pose lastPose; // Pose object to track last pose
+	public Canvas gameUI;  // Canvas object
 
 	public Button[] UIButtons;
 
@@ -176,10 +177,11 @@ public class MenuMode : MonoBehaviour {
 	}
 
 	public void SaveUi(){
-
+		saveSys.SaveScene();
 	}
-	public void LoadUi(){
 
+	public void LoadUi(){
+		// Hide menu canvas and show dropdown menu canvas.
 	}
 
 	public void CreateMode() {
