@@ -175,7 +175,7 @@ public class CreateMode : MonoBehaviour {
 		// getting a handle on the LookAt script
 		LookAt lookAt = (LookAt)FindObjectOfType(typeof(LookAt));
 		// passing the selected objects transform to the LookAt script
-		lookAt.Focus(selected.transform.position);
+		lookAt.Focus(selected);
 	}// FocusSelected
 
 	public void HighlightMaterial() {

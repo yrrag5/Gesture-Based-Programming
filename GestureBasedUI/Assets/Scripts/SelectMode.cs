@@ -110,7 +110,7 @@ public class SelectMode : MonoBehaviour {
 		// getting a handle on the LookAt script
 		LookAt lookAt = (LookAt)FindObjectOfType(typeof(LookAt));
 		// passing the selected objects transform to the LookAt script
-		lookAt.Focus(selected.transform.position);
+		lookAt.Focus(selected);
 	}// focusSelected
 
 	public void ToggleSelectedRigidbody() {
