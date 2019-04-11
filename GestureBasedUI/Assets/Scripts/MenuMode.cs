@@ -125,7 +125,7 @@ public class MenuMode : MonoBehaviour {
 
 					// If the button is save, save current state
 					if(bName.Equals("SaveScene (UnityEngine.UI.Button)")){
-						SaveUi();
+						Save();
 					}
 					// If the button is exit
 					if(bName.Equals("Exit (UnityEngine.UI.Button)")){
@@ -175,10 +175,10 @@ public class MenuMode : MonoBehaviour {
 		}
 	}
 
-	public void SaveUi(){
+	public void Save() {
 
 	}
-	public void LoadUi(){
+	public void LoadUi() {
 
 	}
 

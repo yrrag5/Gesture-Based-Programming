@@ -6,15 +6,10 @@ public class LookAt : MonoBehaviour {
     public static Modes modes;
     public float heightChange;
     public float distanceChange;
-
     public Transform targetPosition;
-    public float yMinLimit = -20f;
-    public float yMaxLimit = 80f;
     public float xSpeed = 120.0f;
-    public float ySpeed = 120.0f;
     private Rigidbody rigidbody;
     float x = 0.0f;
-    float y = 0.0f;
 
 	public void Focus(GameObject target){
         // gets a handle on the singleton instance

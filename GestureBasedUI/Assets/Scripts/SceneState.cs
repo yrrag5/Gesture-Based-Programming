@@ -69,6 +69,14 @@ public class SceneState : MonoBehaviour {
 		Debug.Log(ArrayLength());
 	}// RemoveGameObject
 
+	public void RemoveGameObjects() {
+		for(int i = 0; i < objects.Length; i++) {
+			Destroy(objects[i]);// destroy each object
+		}// for
+		// reset the objects array
+		objects = new GameObject[0];
+	}// RemoveGameObjects
+
 	public GameObject[] getObjects() {
 		return objects;
 	}// getObjects
