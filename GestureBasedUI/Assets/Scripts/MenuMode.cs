@@ -42,6 +42,7 @@ public class MenuMode : MonoBehaviour {
 
 	void Start() {
 		ss = SceneState.getInstance;
+		saveSys = SaveSystem.getInstance;
 
 		UIButtons = new Button[7];// Setting the size of the array of buttons
 		

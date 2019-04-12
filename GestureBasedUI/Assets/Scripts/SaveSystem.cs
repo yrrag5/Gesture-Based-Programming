@@ -3,32 +3,67 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.IO;
 
 public class SaveSystem : MonoBehaviour {
-    private string savePath; 
+    private static SaveSystem instance = null;
+   	private SceneState sceneState;
+    private GameObject gobject;
+    private string myPath; 
     private string saveName;
+    private int arrayLength;
+    private string objectName;
+    private float x;
+    private float y;
+    private float z;
+
 
     public void SaveScene() {
-		// Allows the user to save the current game object array with a personalised file name.
-        // Application.persistentDataPath is a variable that returns a location where Unity can store data from the project.
-//        dataPath = Path.Combine(Application.persistentDataPath, saveName + ".csv");
+        Debug.Log("In SaveScene");
+   		sceneState = (SceneState)FindObjectOfType(typeof(SceneState));
 
-        // Prints the name, x, y & z coordinates of each game object to the save file.
-        
+        // Array length needed for looping through array.
+        arrayLength = sceneState.ArrayLength();
+
+        // Check the number of save files for new save file name.
+        // Set path to save files.        
+        myPath = @"C:\Users\Hughballs\Documents\guiProSave\save1.csv";
+
+        StreamWriter writer = new StreamWriter(myPath, true);
+
+        // Loop through object array.
+        for (int i = 0; i < (arrayLength - 1); i++) {
+            Debug.Log("save loop no: " + i); 
+            // Get a handle on object in array.
+            gobject = sceneState.getObject(i);
+
+            // Get a hold of the object's variables.
+            objectName = gobject.name;
+            x = gobject.transform.position.x;
+            y = gobject.transform.position.y;
+            z = gobject.transform.position.z;
+
+            // Write object details to file.
+            writer.WriteLine(objectName + ", " + x + ", " + ", " + y + ", " + z);
+        }
+
+        // Close StreamWriter.
+        writer.Close();
+
     }
 
-    public void LoadScene(int saveNo) {
-        // Displays save files in a directory. Allows the user to select and load them.
-        
-        // Check if file exists. 
-
-        // Path to file, using the integer passed from menu mode.
- //       Filesteam file = file.Open(Application.persistentDataPath, saveName + saveNo + ".csv", FileMode.Open);
-
-        // Instantiates the GameObject array with the data in the save file.
-
-        
-    }
+    public static SaveSystem getInstance {  
+        get {   
+			// Check to see if the instance is null.
+			if (instance == null) {
+				// Check to see if there is another instance of this class.
+				instance = GameObject.FindObjectOfType<SaveSystem>();
+				if (instance == null) 
+					instance = new SaveSystem(); 				
+			} 
+			return instance;   
+	    }
+    } 
 
 }
 
