@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using System.IO;
 
 using LockingPolicy = Thalmic.Myo.LockingPolicy;
 using Pose = Thalmic.Myo.Pose;
@@ -20,8 +20,8 @@ public class MenuMode : MonoBehaviour {
 		set { locked = value; }
 	}// lock accesssor
 	SceneState ss;
-	private Pose lastPose;// Pose object to track last pose
-	public Canvas gameUI;// Canvas object
+	private Pose lastPose; // Pose object to track last pose
+	public Canvas gameUI;  // Canvas object
 
 	public Button[] UIButtons;
 
@@ -117,20 +117,20 @@ public class MenuMode : MonoBehaviour {
 					// If the button is continue, enter create mode 
 					if(bName.Equals("Continue (UnityEngine.UI.Button)")){
 						CreateMode();
-					}
+					}// if
 					// If the button is load, enter the load ui
 					if(bName.Equals("LoadScene (UnityEngine.UI.Button)")){
 						LoadUi();
-					}
+					}// if
 
 					// If the button is save, save current state
 					if(bName.Equals("SaveScene (UnityEngine.UI.Button)")){
 						Save();
-					}
+					}// if
 					// If the button is exit
 					if(bName.Equals("Exit (UnityEngine.UI.Button)")){
 						Exit();					
-					}
+					}// if
 				}// if/else if
 
 				// reset the message at rest				
@@ -172,15 +172,16 @@ public class MenuMode : MonoBehaviour {
 		else { // otherwise, store the material and then change to highlighted.
 			shapecolor = selected.GetComponent<Image>().material;
 			selected.GetComponent<Image>().material = highlight;
-		}
-	}
+		}// if/else
+	}// HighlightMaterial
 
-	public void Save() {
+	public void Save(){
+		ss.SaveState();
+	}// Save
 
-	}
-	public void LoadUi() {
-
-	}
+	public void LoadUi(){
+		ss.LoadState("");
+	}// LoadUi
 
 	public void CreateMode() {
 		allowAccess = false;

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SceneState : MonoBehaviour {
+	LoadState ls;
+	SaveState ss;
 	// singleton design pattern  
     private static SceneState instance = null; 
 	// GameObject array initialization
@@ -15,6 +17,8 @@ public class SceneState : MonoBehaviour {
 			Destroy(this.gameObject);
 		}// if
 		DontDestroyOnLoad(this.gameObject);
+		ls = GameObject.FindObjectOfType<LoadState>();
+		ss = GameObject.FindObjectOfType<SaveState>();
 	}// Awake
 
 	private SceneState() {  
@@ -54,14 +58,14 @@ public class SceneState : MonoBehaviour {
 		// create a new array with one less space for another element
 		GameObject[] temp = new GameObject[objects.Length - 1];
 		// copy the contents of the objects array, excluding the index, into the new array
-		for(int i = 0; i < objects.Length; i++) {
+		for(int i = 0; i < objects.Length-1; i++) {
 			if(i != index) {
 				temp[count] = objects[i];
 				count++;
 			} else {
 				// delete the object from the scene
 				Destroy(objects[i]);
-			}
+			}// if/else
 		}// for
 		// set the objects array to the new array
 		objects = new GameObject[temp.Length];
@@ -97,5 +101,13 @@ public class SceneState : MonoBehaviour {
 		// return the number of elements in the array
 		return objects.Length;
 	}// ArrayLength
+
+	public void SaveState(){
+		ss.SaveCurrentState();
+	}// SaveState
+
+	public void LoadState(string s) {
+		ls.ParseFile(s);
+	}// LoadState
 	
 }// SceneState
