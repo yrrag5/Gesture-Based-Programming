@@ -20,7 +20,6 @@ public class MenuMode : MonoBehaviour {
 		set { locked = value; }
 	}// lock accesssor
 	SceneState ss;
-	SaveSystem saveSys;
 	private Pose lastPose; // Pose object to track last pose
 	public Canvas gameUI;  // Canvas object
 
@@ -42,7 +41,6 @@ public class MenuMode : MonoBehaviour {
 
 	void Start() {
 		ss = SceneState.getInstance;
-		saveSys = SaveSystem.getInstance;
 
 		UIButtons = new Button[7];// Setting the size of the array of buttons
 		
@@ -178,7 +176,7 @@ public class MenuMode : MonoBehaviour {
 	}
 
 	public void SaveUi(){
-		saveSys.SaveScene();
+		ss.SaveState();
 	}
 
 	public void LoadUi(){

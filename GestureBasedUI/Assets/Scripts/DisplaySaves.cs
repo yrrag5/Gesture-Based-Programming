@@ -6,17 +6,18 @@ using UnityEngine.UI;
 
 public class DisplaySaves : MonoBehaviour {
 
-    List<string> myDropOptions = new List<string>{};
+  List<string> myDropOptions = new List<string>{};
 	Dropdown myDropdown;
-//	LoadState ls;
+	SceneState ss;
 
 	// Use this for initialization
 	private void Start () {
+		ss = SceneState.getInstance;
 		myDropdown = GetComponent<Dropdown>();
 		Display();
 	}
 	
-	void Display() {
+	public void Display() {
 		string myPath = @"C:\Users\Hughballs\Documents\guiProSave";
 	//  string myPath = Application.persistentDataPath;
 
@@ -39,6 +40,7 @@ public class DisplaySaves : MonoBehaviour {
 		string SelectedSave = this.GetComponent<Dropdown>().options[value].text;
 		Debug.Log(SelectedSave);
 		
-		// Pass this mofo to tim.
+		// Pass this name to LoadState.
+		ss.LoadState(SelectedSave);
 	}
 }

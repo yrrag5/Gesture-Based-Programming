@@ -1,12 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class SceneState : MonoBehaviour {
 	// singleton design pattern  
     private static SceneState instance = null; 
 	// GameObject array initialization
 	private GameObject[] objects;
+
+	// For saving & loading.
+	private GameObject gobject;
+    private string myPath; 
+    private string saveName;
+    private int arrayLength;
+    private string objectName;
+    private float x;
+    private float y;
+    private float z;
 
 	void Awake() {
 		this.objects = new GameObject[0];
@@ -90,4 +101,37 @@ public class SceneState : MonoBehaviour {
 		return objects.Length;
 	}// ArrayLength
 	
+	public void SaveState() {
+        // Array length needed for looping through array.
+        arrayLength = ArrayLength();
+
+        // Check the number of save files for new save file name.
+        // Set path to save files.        
+        myPath = @"C:\Users\Hughballs\Documents\guiProSave\save1.csv";
+
+        StreamWriter writer = new StreamWriter(myPath, true);
+
+        // Loop through object array.
+        for (int i = 0; i < (arrayLength - 1); i++) {
+            // Get a handle on object in array.
+            gobject = getObject(i);
+
+            // Get a hold of the object's variables.
+            objectName = gobject.name;
+            x = gobject.transform.position.x;
+            y = gobject.transform.position.y;
+            z = gobject.transform.position.z;
+
+            // Write object details to file.
+            writer.WriteLine(objectName + ", " + x + ", " + ", " + y + ", " + z);
+        }
+
+        // Close StreamWriter.
+        writer.Close();
+    }
+
+	public void LoadState(string s) {
+
+	}
+
 }// SceneState
