@@ -50,18 +50,20 @@ public class MenuMode : MonoBehaviour {
 		selected = UIButtons[0];
 	}// Start
 
-	void Update(){
+	void Update() {
 		// if the class is not locked out
-		if(!locked){
+		if(!locked) {
 			// myo = GameObject.FindGameObjectWithTag("myo");
 			// Access the ThalmicMyo component attached to the Myo object.
         	ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo>();
-			if(isExiting){
+			if(isExiting) {
 				if(thalmicMyo.pose == Pose.FingersSpread)
 					consecutive++;// increment the counter
-				else if(consecutive > 30)
+				else if(consecutive > 30) {
+					// vibrate the Myo
+					thalmicMyo.Vibrate(VibrationType.Short);
 					Exit();// exit the app
-				else if(thalmicMyo.pose != Pose.Rest){
+				} else if(thalmicMyo.pose != Pose.Rest) {
 					isExiting = false;// stop exiting
 					consecutive = 0;// reset counter
 				}// if..else if
@@ -84,40 +86,21 @@ public class MenuMode : MonoBehaviour {
 					isExiting = true;
 					// ask the user if the would like to exit
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit application.");
+					// vibrate the Myo
+					thalmicMyo.Vibrate(VibrationType.Short);
 				} else if(thalmicMyo.pose == Pose.DoubleTap && lastPose != Pose.DoubleTap) {
 					// get name of the button to access functionality 
 					string bName = UIButtons[selectedButton].ToString();
 					
 					// If the button is an object to instanciate, pass it to the select mode
 					if(bName.Equals("CubeObject (UnityEngine.UI.Button)")) {
-						// Instanciate object at position of danger zone
-						GameObject g = (GameObject)Instantiate(cube, GameObject.FindWithTag("SpawnPoint").transform.position, Quaternion.identity);
-						// set the name of the object, remove (clone)
-						g.name = cube.name;
-						// Add that object to the scene state
-						ss.AddGameObject(g);
-						// Pass selectmode the object and its position in the scene state array
-						SelectMode(g,ss.ArrayLength());
+						CreateCube();
 					}// if
 					if(bName.Equals("CuboidObject (UnityEngine.UI.Button)")) {
-						// Instanciate object at position of danger zone
-						GameObject g = (GameObject)Instantiate(cuboid, GameObject.FindWithTag("SpawnPoint").transform.position, Quaternion.identity);
-						// set the name of the object, remove (clone)
-						g.name = cuboid.name;
-						// Add that object to the scene state
-						ss.AddGameObject(g);
-						// Pass selectmode the object and its position in the scene state array
-						SelectMode(g,ss.ArrayLength());
+						CreateCuboid();
 					}// if
 					if(bName.Equals("CylinderObject (UnityEngine.UI.Button)")) {
-						// Instanciate object at position of danger zone
-						GameObject g = (GameObject)Instantiate(cylinder, GameObject.FindWithTag("SpawnPoint").transform.position, Quaternion.identity);
-						// set the name of the object, remove (clone)
-						g.name = cylinder.name;
-						// Add that object to the scene state
-						ss.AddGameObject(g);
-						// Pass selectmode the object and its position in the scene state array
-						SelectMode(g,ss.ArrayLength());
+						CreateCylinder();
 					}// if
 						
 					// If the button is continue, enter create mode 
@@ -170,6 +153,40 @@ public class MenuMode : MonoBehaviour {
 
 		return UIButtons[selectedButton];
 	}//GetNextButton
+
+	
+	public void CreateCylinder() {
+		// Instanciate object at position of danger zone
+		GameObject g = (GameObject)Instantiate(cylinder, GameObject.FindWithTag("SpawnPoint").transform.position, Quaternion.identity);
+		// set the name of the object, remove (clone)
+		g.name = cylinder.name;
+		// Add that object to the scene state
+		ss.AddGameObject(g);
+		// Pass selectmode the object and its position in the scene state array
+		SelectMode(g,ss.ArrayLength());
+	}// CreateCylinder
+
+	public void CreateCube() {
+		// Instanciate object at position of danger zone
+		GameObject g = (GameObject)Instantiate(cube, GameObject.FindWithTag("SpawnPoint").transform.position, Quaternion.identity);
+		// set the name of the object, remove (clone)
+		g.name = cube.name;
+		// Add that object to the scene state
+		ss.AddGameObject(g);
+		// Pass selectmode the object and its position in the scene state array
+		SelectMode(g,ss.ArrayLength());
+	}// CreateCube
+
+	public void CreateCuboid() {
+		// Instanciate object at position of danger zone
+		GameObject g = (GameObject)Instantiate(cuboid, GameObject.FindWithTag("SpawnPoint").transform.position, Quaternion.identity);
+		// set the name of the object, remove (clone)
+		g.name = cuboid.name;
+		// Add that object to the scene state
+		ss.AddGameObject(g);
+		// Pass selectmode the object and its position in the scene state array
+		SelectMode(g,ss.ArrayLength());
+	}// CreateCuboid
 
 	public void HighlightMaterial() {
 		// If material is highlighted.

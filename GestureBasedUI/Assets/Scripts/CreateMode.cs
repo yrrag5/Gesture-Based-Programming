@@ -72,6 +72,8 @@ public class CreateMode : MonoBehaviour {
 						OriginalMaterial();
 						isExiting = false;
 						MenuMode();// exit to menu mode
+						// vibrate the Myo
+						thalmicMyo.Vibrate(VibrationType.Short);
 					} else if(thalmicMyo.pose != Pose.Rest) {
 						isExiting = false;// stop exiting
 						consecutive = 0;// reset counter
@@ -87,6 +89,8 @@ public class CreateMode : MonoBehaviour {
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 						// Ask the user if they want to exit to menu.
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit to Menu.");
+						// vibrate the Myo
+						thalmicMyo.Vibrate(VibrationType.Short);
 					} else if (thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 						ParseLeft();

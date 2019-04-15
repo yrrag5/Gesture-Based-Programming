@@ -7,7 +7,6 @@ public class MenuTest : MonoBehaviour {
     public GameObject Panel;
     int counter;
 
-
     public void GameSettings()
     {
         counter++;

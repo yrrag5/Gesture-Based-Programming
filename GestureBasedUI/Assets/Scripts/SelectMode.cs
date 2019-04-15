@@ -44,6 +44,8 @@ public class SelectMode : MonoBehaviour {
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 					isExiting = false;
 					CreateMode();// exit to create mode
+					// vibrate the Myo
+					thalmicMyo.Vibrate(VibrationType.Short);
 				} else if(thalmicMyo.pose != Pose.Rest) {
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 					isExiting = false;// stop exiting
@@ -56,6 +58,8 @@ public class SelectMode : MonoBehaviour {
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 					inDelete = false;
 					DeleteSelected();
+					// vibrate the Myo
+					thalmicMyo.Vibrate(VibrationType.Short);
 				} else if(thalmicMyo.pose != Pose.Rest) {
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 					inDelete = false;// stop exiting
@@ -80,10 +84,14 @@ public class SelectMode : MonoBehaviour {
 					isExiting = true;
 					// ask the user if the would like to exit
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit Select Mode.");
+					// vibrate the Myo
+					thalmicMyo.Vibrate(VibrationType.Short);
 				} else if(thalmicMyo.pose == Pose.DoubleTap && thalmicMyo.pose != lastPose) {
 					inDelete = true;
 					// ask the user if the would like to delete the object
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Double-Tap gesture to Delete selected object.");
+					// vibrate the Myo
+					thalmicMyo.Vibrate(VibrationType.Short);
 				}// if....else if
 
 				if(thalmicMyo.pose != Pose.Fist) gyroReset = true;// reset the gyro control

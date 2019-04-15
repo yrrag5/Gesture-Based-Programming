@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 
 public class SaveState : MonoBehaviour {
+	public Canvas gameUI;
 	string PATH;
 	[SerializeField]
 	DisplaySaves ds;
@@ -70,6 +71,7 @@ public class SaveState : MonoBehaviour {
         // Close StreamWriter.
         writer.Close();
 		Debug.Log("Saved to: " + path);
+		gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Game state saved to: " + fileName);
     }// Save
 
 }// SaveState
