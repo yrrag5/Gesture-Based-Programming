@@ -12,7 +12,6 @@ public class CreateTest : MonoBehaviour {
 
 	// Use this for initialization.
 	void Start () {
-
 		currMode = Modes.getInstance;
 		currMode.mode = Modes.Mode.Create;
 		
@@ -23,20 +22,12 @@ public class CreateTest : MonoBehaviour {
 		
 		if (arrayLength != 0) {
 			Debug.Log("length: " + arrayLength);
-
 			// Set selected shape to last shape in GameObjects array.
 			selected = sceneState.getObject(arrayLength - 1);
-		}
-		else {
+		} else {
 			Debug.Log("Object array is empty");
-		}
-
+		}// if/else
 	}// start
-	
-	// Update is called once per frame.
-	void Update () {
-		// Detect Myo gestures (left, right, close, exit).
-	}
 
 	void ParseLeft (int arrayIndex) {
 		// Get rid of highlight on current GameObject.
@@ -48,13 +39,11 @@ public class CreateTest : MonoBehaviour {
 		else {
 			arrayIndex -= 1;
 			selected = sceneState.getObject(arrayIndex);
-		}
-
-		// Need code for camera.
+		}// if/else
 
 		// Highlight the newly selected shape.
 		HighlightMaterial();		
-	}
+	}// ParseLeft
 
 	void ParseRight (int arrayIndex) {
 		// Get rid of highlight on current GameObject.
@@ -67,19 +56,16 @@ public class CreateTest : MonoBehaviour {
 		else {
 			arrayIndex += 1;
 			selected = sceneState.getObject(arrayIndex);
-		}
-
-		// Need code for camera.
+		}// if/else
 
 		// Highlight the newly selected shape.
 		HighlightMaterial();	
-	}
+	}// ParseRight
 
 	void ReturnToMenu() {
 		// Get rid of highlight on current GameObject.
 		HighlightMaterial();
-		// Change back to menu mode.
-	}
+	}// ReturnToMenu
 
 	void HighlightMaterial() {
 		// Toggle between highlighted and not.
@@ -87,6 +73,6 @@ public class CreateTest : MonoBehaviour {
 			selected.GetComponent<Renderer>().material.color = Color.red;
 		else
 			selected.GetComponent<Renderer>().material.color = Color.white;
-	}
-
-}
+	}// HighlightMaterial
+	
+}// CreateTest

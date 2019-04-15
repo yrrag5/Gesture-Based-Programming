@@ -1,14 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class SceneState : MonoBehaviour {
-	LoadState ls;
-	SaveState ss;
 	// singleton design pattern  
     private static SceneState instance = null; 
 	// GameObject array initialization
 	private GameObject[] objects;
+
+	// For saving & loading.
+	private GameObject gobject;
+    private string myPath; 
+    private string saveName;
+    private int arrayLength;
+    private string objectName;
+    private float x;
+    private float y;
+    private float z;
 
 	void Awake() {
 		this.objects = new GameObject[0];
@@ -17,8 +26,6 @@ public class SceneState : MonoBehaviour {
 			Destroy(this.gameObject);
 		}// if
 		DontDestroyOnLoad(this.gameObject);
-		ls = GameObject.FindObjectOfType<LoadState>();
-		ss = GameObject.FindObjectOfType<SaveState>();
 	}// Awake
 
 	private SceneState() {  
@@ -33,7 +40,7 @@ public class SceneState : MonoBehaviour {
 				if (instance == null) {
 					instance = new SceneState(); 				
 				}// if
-			}  // if
+			}// if
 			return instance;   
 	    }// get
     }// getInstance  
@@ -50,7 +57,6 @@ public class SceneState : MonoBehaviour {
 		temp[ArrayLength()] = newObject;
 		// set the objects array to the new array
 		objects = temp;
-		// Debug.Log("Object number " + ArrayLength() + " added!");
 	}// AddGameObject
 
 	public void RemoveGameObject(int index) {
@@ -102,12 +108,14 @@ public class SceneState : MonoBehaviour {
 		return objects.Length;
 	}// ArrayLength
 
-	public void SaveState(){
-		ss.SaveCurrentState();
+	public void SaveState() {
+		Debug.Log("Entered.");
+		if(ArrayLength() > 0)
+			this.GetComponent<SaveState>().Save(objects);
 	}// SaveState
 
 	public void LoadState(string s) {
-		ls.ParseFile(s);
+		this.GetComponent<LoadState>().ParseFile(s);
 	}// LoadState
-	
+
 }// SceneState

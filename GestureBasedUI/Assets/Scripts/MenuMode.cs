@@ -22,7 +22,8 @@ public class MenuMode : MonoBehaviour {
 	SceneState ss;
 	private Pose lastPose; // Pose object to track last pose
 	public Canvas gameUI;  // Canvas object
-
+	public GameObject loadScreen; // object
+	public GameObject UIScreen; // object
 	public Button[] UIButtons;
 
 	public int selectedButton = 0;
@@ -41,14 +42,13 @@ public class MenuMode : MonoBehaviour {
 
 	void Start() {
 		ss = SceneState.getInstance;
-
-		UIButtons = new Button[7];// Setting the size of the array of buttons
-		
+		// Setting the size of the array of buttons
+		UIButtons = new Button[7];
+		// getting a handle on the buttons
 		for(int i = 0; i < UIButtons.Length; i++)
 			UIButtons[i] = GameObject.FindGameObjectWithTag("button" + i).GetComponent<Button>();
-
 		selected = UIButtons[0];
-	}
+	}// Start
 
 	void Update(){
 		// if the class is not locked out
@@ -64,7 +64,7 @@ public class MenuMode : MonoBehaviour {
 				else if(thalmicMyo.pose != Pose.Rest){
 					isExiting = false;// stop exiting
 					consecutive = 0;// reset counter
-				}
+				}// if..else if
 			} else if(allowAccess) {
 				if(thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
 					// Highlights selected button
@@ -89,49 +89,55 @@ public class MenuMode : MonoBehaviour {
 					string bName = UIButtons[selectedButton].ToString();
 					
 					// If the button is an object to instanciate, pass it to the select mode
-					if(bName.Equals("CubeObject (UnityEngine.UI.Button)")){
+					if(bName.Equals("CubeObject (UnityEngine.UI.Button)")) {
 						// Instanciate object at position of danger zone
 						GameObject g = (GameObject)Instantiate(cube, GameObject.FindWithTag("SpawnPoint").transform.position, Quaternion.identity);
+						// set the name of the object, remove (clone)
+						g.name = cube.name;
 						// Add that object to the scene state
 						ss.AddGameObject(g);
 						// Pass selectmode the object and its position in the scene state array
 						SelectMode(g,ss.ArrayLength());
-					}
-					if(bName.Equals("CuboidObject (UnityEngine.UI.Button)")){
+					}// if
+					if(bName.Equals("CuboidObject (UnityEngine.UI.Button)")) {
 						// Instanciate object at position of danger zone
 						GameObject g = (GameObject)Instantiate(cuboid, GameObject.FindWithTag("SpawnPoint").transform.position, Quaternion.identity);
+						// set the name of the object, remove (clone)
+						g.name = cuboid.name;
 						// Add that object to the scene state
 						ss.AddGameObject(g);
 						// Pass selectmode the object and its position in the scene state array
 						SelectMode(g,ss.ArrayLength());
-					}
-					if(bName.Equals("CylinderObject (UnityEngine.UI.Button)")){
+					}// if
+					if(bName.Equals("CylinderObject (UnityEngine.UI.Button)")) {
 						// Instanciate object at position of danger zone
 						GameObject g = (GameObject)Instantiate(cylinder, GameObject.FindWithTag("SpawnPoint").transform.position, Quaternion.identity);
+						// set the name of the object, remove (clone)
+						g.name = cylinder.name;
 						// Add that object to the scene state
 						ss.AddGameObject(g);
 						// Pass selectmode the object and its position in the scene state array
 						SelectMode(g,ss.ArrayLength());
-					}
+					}// if
 						
 					// If the button is continue, enter create mode 
-					if(bName.Equals("Continue (UnityEngine.UI.Button)")){
+					if(bName.Equals("Continue (UnityEngine.UI.Button)")) {
 						CreateMode();
 					}// if
 					// If the button is load, enter the load ui
-					if(bName.Equals("LoadScene (UnityEngine.UI.Button)")){
-						LoadUi();
+					if(bName.Equals("LoadScene (UnityEngine.UI.Button)")) {
+						ShowLoadUI();
 					}// if
 
 					// If the button is save, save current state
-					if(bName.Equals("SaveScene (UnityEngine.UI.Button)")){
+					if(bName.Equals("SaveScene (UnityEngine.UI.Button)")) {
 						Save();
 					}// if
 					// If the button is exit
-					if(bName.Equals("Exit (UnityEngine.UI.Button)")){
+					if(bName.Equals("Exit (UnityEngine.UI.Button)")) {
 						Exit();					
 					}// if
-				}// if/else if
+				}// if...else if
 
 				// reset the message at rest				
 				if(thalmicMyo.pose == Pose.Rest) gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
@@ -140,27 +146,27 @@ public class MenuMode : MonoBehaviour {
 				lastPose = thalmicMyo.pose;
 			}// if
 
-			if(thalmicMyo.pose == Pose.Rest && allowAccess == false) { 
+			if(thalmicMyo.pose == Pose.Rest && allowAccess == false && UIScreen.activeSelf) { 
+				Debug.Log("UI enabled");
 				allowAccess = true;
 				HighlightMaterial();
-			}
+			}// if
 		} else allowAccess = false;
 	}// Update
 
 	public Button getNextButton(int direction){
 		// If the direction is 1 change is positive, else negative
-		if(direction == 1){
+		if(direction == 1) {
 			if(selectedButton == UIButtons.Length -1)
 				selectedButton = 0;
 			else
 				selectedButton++;		
-		}//if
-		else{
+		} else {
 			if(selectedButton == 0)
 				selectedButton = UIButtons.Length -1;
 			else
 				selectedButton--;	
-		}//else
+		}// if/else
 
 		return UIButtons[selectedButton];
 	}//GetNextButton
@@ -175,13 +181,21 @@ public class MenuMode : MonoBehaviour {
 		}// if/else
 	}// HighlightMaterial
 
-	public void Save(){
+	public void Save() {
 		ss.SaveState();
 	}// Save
 
-	public void LoadUi(){
-		ss.LoadState("");
-	}// LoadUi
+	public void ShowLoadUI() {
+		allowAccess = false;
+		loadScreen.SetActive(true);
+		UIScreen.SetActive(false);
+	}// ShowLoadUI
+
+	public void HideLoadUI() {
+		allowAccess = true;
+		loadScreen.SetActive(false);
+		UIScreen.SetActive(true);
+	}// HideLoadUI
 
 	public void CreateMode() {
 		allowAccess = false;

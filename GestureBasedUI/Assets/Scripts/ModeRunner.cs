@@ -42,7 +42,10 @@ public class ModeRunner : MonoBehaviour {
 					// sceneState instance
 					SceneState ss = SceneState.getInstance;
 					// set selected if possible
-					if(ss.ArrayLength() > 0)cm.selected = ss.getObject(ss.ArrayLength()-1);
+					if(ss.ArrayLength() > 0) {
+						cm.selected = ss.getObject(ss.ArrayLength()-1);
+						cm.HighlightMaterial();
+					}// if
 					break;
 				case Modes.Mode.Select:
 					// hide the user interface

@@ -8,8 +8,6 @@ using UnlockType = Thalmic.Myo.UnlockType;
 using VibrationType = Thalmic.Myo.VibrationType;
 
 public class CreateMode : MonoBehaviour {
-
-	// Global variables.
 	public static Modes modes;
 	private SceneState sceneState;
 	public GameObject selected;
@@ -18,8 +16,6 @@ public class CreateMode : MonoBehaviour {
 	private Material shapecolor;
 	public Material highlight;
 	public Canvas gameUI;
-
-	// Myo variables.
 	public GameObject myo = null;
 	private Pose lastPose = Pose.Unknown;
 	private bool isExiting = false;
@@ -47,72 +43,62 @@ public class CreateMode : MonoBehaviour {
 			arrayIndex = arrayLength - 1;
 		} else {
 			arrayIndex = 1;
-		}
+		}// if/else
 	}// Start
 
 	void Update() {
 		// If the class is not locked out.
 		if(!locked) {
+			// Access the ThalmicMyo component attached to the Myo object.
+			ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo>();
 
-			if(selected == null && sceneState.ArrayLength() >= 0)
+			if(selected == null && sceneState.ArrayLength() > 0)
 				selected = sceneState.getObject(0);
-			
+			else if(sceneState.ArrayLength() == 0) {
+				gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("No objects! Please create objects.");
+				if(thalmicMyo.pose == Pose.FingersSpread)
+					MenuMode();
+			}// if/else if
 			if(selected != null && sceneState.ArrayLength() >= 0) {
+				
 				arrayLength = sceneState.ArrayLength();
 				FocusSelected();
-
-				// Access the ThalmicMyo component attached to the Myo object.
-				ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo> ();
 
 				if(isExiting) {
 					if(thalmicMyo.pose == Pose.FingersSpread) {
 						consecutive++;// increment the counter
 					} else if(consecutive > 30) {
+						// Get rid of highlight on current GameObject.
+						OriginalMaterial();
 						isExiting = false;
 						MenuMode();// exit to menu mode
 					} else if(thalmicMyo.pose != Pose.Rest) {
 						isExiting = false;// stop exiting
 						consecutive = 0;// reset counter
-					}
+					}// if..else if
 				} else if(allowAccess) {
 					// Update references when the pose becomes fingers spread or the q key is pressed.
 					// if pose == whatever && != lastpose
 					if (thalmicMyo.pose == Pose.FingersSpread && isExiting) {
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 						MenuMode();
-					}
-					else if(thalmicMyo.pose == Pose.FingersSpread) {
+					} else if(thalmicMyo.pose == Pose.FingersSpread) {
 						isExiting = true;
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 						// Ask the user if they want to exit to menu.
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Finger-Spread gesture to exit to Menu.");
-					}
-					else if (thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
+					} else if (thalmicMyo.pose == Pose.WaveIn && thalmicMyo.pose != lastPose) {
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-						// Debug.Log("create mode - Wave in");
-						if (arrayIndex == -1)
-							gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Object array is empty! Please create objects.");
-						else 
-							ParseLeft();
-					}
-					else if (thalmicMyo.pose == Pose.WaveOut && thalmicMyo.pose != lastPose) {
+						ParseLeft();
+					} else if (thalmicMyo.pose == Pose.WaveOut && thalmicMyo.pose != lastPose) {
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-						// Debug.Log("create mode - Wave out");
-						if (arrayIndex == -1)
-							gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Object array is empty! Please create objects.");
-						else 
-							ParseRight();
-					}
-					else if (thalmicMyo.pose == Pose.DoubleTap && thalmicMyo.pose != lastPose) {
+						ParseRight();
+					} else if (thalmicMyo.pose == Pose.DoubleTap && thalmicMyo.pose != lastPose) {
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Double-tap to enter select mode.");
-					}
-					else if (thalmicMyo.pose == Pose.DoubleTap) {
+					} else if (thalmicMyo.pose == Pose.DoubleTap) {
 						gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-						if (arrayIndex == -1)
-							gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Object array is empty! Please create objects.");
-						else 
-							SelectMode();
-					}
+						SelectMode();
+					}// if...else if
 
 					if(thalmicMyo.pose != Pose.FingersSpread) isExiting = false;
 
@@ -121,53 +107,58 @@ public class CreateMode : MonoBehaviour {
 
 				if(thalmicMyo.pose == Pose.Rest && allowAccess == false) { 
 					allowAccess = true;
-					HighlightMaterial();
+					// HighlightMaterial();
 				}// if	
 			}// if
 
 		} else allowAccess = false;	
 	}// Update
 
-	// ----- MODE FUNCTIONALITY -----
 	void ParseLeft() {
-		// Get rid of highlight on current GameObject.
-		OriginalMaterial();
-		// Select GameObject by decrementing index of array by 1.
-		// if index == 0, select the last GameObject in array.
-		if (arrayIndex == 0) {
-			arrayIndex = arrayLength - 1;
-			selected = sceneState.getObject(arrayIndex);
-		}
-		else {
-			arrayIndex -= 1;
-			selected = sceneState.getObject(arrayIndex);
-		}
+		if(sceneState.ArrayLength() > 1) {
+			// Get rid of highlight on current GameObject.
+			OriginalMaterial();
+			// Select GameObject by decrementing index of array by 1.
+			// if index == 0, select the last GameObject in array.
+			if (arrayIndex == 0) {
+				arrayIndex = arrayLength - 1;
+				selected = sceneState.getObject(arrayIndex);
+			} else {
+				arrayIndex -= 1;
+				selected = sceneState.getObject(arrayIndex);
+			}// if/else
 
-		// Focus camera on object.
-		FocusSelected();
-		// Highlight the newly selected shape.
-		HighlightMaterial();		
+			if(selected != null) {
+				// Focus camera on object.
+				FocusSelected();
+				// Highlight the newly selected shape.
+				HighlightMaterial();
+			}// if
+		}// if
 	}// ParseLeft
 
 	void ParseRight() {
-		// Get rid of highlight on current GameObject.
-		OriginalMaterial();
+		if(sceneState.ArrayLength() > 1) {
+			// Get rid of highlight on current GameObject.
+			OriginalMaterial();
 
-		// Select GameObject by incrementing index of array by 1.
-		// if index == array.length - 1, select the first GameObject in array.
-		if (arrayIndex == arrayLength - 1) {
-			arrayIndex = 0;
-			selected = sceneState.getObject(arrayIndex);
-		}
-		else {
-			arrayIndex = arrayIndex + 1;
-			selected = sceneState.getObject(arrayIndex);
-		}
+			// Select GameObject by incrementing index of array by 1.
+			// if index == array.length - 1, select the first GameObject in array.
+			if (arrayIndex == arrayLength - 1) {
+				arrayIndex = 0;
+				selected = sceneState.getObject(arrayIndex);
+			} else {
+				arrayIndex = arrayIndex + 1;
+				selected = sceneState.getObject(arrayIndex);
+			}// if/else
 
-		// Focus camera on object.
-		FocusSelected();
-		// Highlight the newly selected shape.
-		HighlightMaterial();
+			if(selected != null) {
+				// Focus camera on object.
+				FocusSelected();
+				// Highlight the newly selected shape.
+				HighlightMaterial();
+			}// if
+		}// if
 	}// ParseRight
 
 	// Focus camera on selected object.
@@ -183,19 +174,17 @@ public class CreateMode : MonoBehaviour {
 		selected.GetComponent<Renderer>().material = highlight;
 	}// HighlightMaterial
 
-	public void OriginalMaterial(){
+	public void OriginalMaterial() {
 		selected.GetComponent<Renderer>().material = shapecolor;
 	}// OriginalMaterials
 
-	// ----- MODE CHANGING METHODS -----
 	public void MenuMode() {
-		// Get rid of highlight on current GameObject.
-		OriginalMaterial();
+		if(selected != null) {
+			// Get rid of highlight on current GameObject.
+			OriginalMaterial();
+		}// if
 		allowAccess = false;
 		gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
-		// Get rid of highlight on current GameObject.
-		HighlightMaterial();
-		// Change back to menu mode.
 		// Gets a handle on the singleton instance.
 		modes = Modes.getInstance;
 		// Change the mode.

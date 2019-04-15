@@ -8,7 +8,6 @@ public class LookAt : MonoBehaviour {
     public float distanceChange;
     public Transform targetPosition;
     public float xSpeed = 120.0f;
-    private Rigidbody rigidbody;
     float x = 0.0f;
 
 	public void Focus(GameObject target){
@@ -24,7 +23,7 @@ public class LookAt : MonoBehaviour {
             // setting the change factors
             heightChange = 1.5f;
             distanceChange = -10f;
-        }// else if
+        }// if/else if
 
         // move to the target object
         this.transform.position = new Vector3(target.transform.position.x - distanceChange, target.transform.position.y, target.transform.position.z);

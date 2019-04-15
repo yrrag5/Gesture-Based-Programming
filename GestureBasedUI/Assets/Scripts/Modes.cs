@@ -24,22 +24,20 @@ public class Modes : MonoBehaviour {
     public static Modes getInstance {  
         get {   
 			// check to see if the instance is null
-			if (instance == null){
+			if (instance == null) {
 				// check to see if there is another instance of this class
 				instance = GameObject.FindObjectOfType<Modes>();
-				if (instance == null){
+				if (instance == null) {
 					instance = new Modes(); 				
 				}// if
-			}  // if
+			}// if
 			return instance;   
 	    }// get
     }// getInstance  
 
-
 	// this function is for testing purposes only
 	public void Parse(string myString) {
-		try
-		{
+		try {
 			Mode enumerable = (Mode)System.Enum.Parse(typeof(Mode), myString);
 			mode = enumerable;
 		} catch (System.Exception) {

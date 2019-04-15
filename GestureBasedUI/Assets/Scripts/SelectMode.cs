@@ -27,9 +27,11 @@ public class SelectMode : MonoBehaviour {
 	private Pose lastPose;// Pose object to track last pose
 	public Canvas gameUI;// Canvas object
 
-	void Update(){
+	void Update() {
 		// if the class is not locked out
 		if(!locked){
+			if(selected == null)
+				selected = SceneState.getInstance.getObject(0);
 			FocusSelected();
 			// myo = GameObject.FindGameObjectWithTag("myo");
 			// Access the ThalmicMyo component attached to the Myo object.
@@ -39,25 +41,29 @@ public class SelectMode : MonoBehaviour {
 				if(thalmicMyo.pose == Pose.FingersSpread) {
 					consecutive++;// increment the counter
 				} else if(consecutive > 30) {
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 					isExiting = false;
 					CreateMode();// exit to create mode
-				} else if(thalmicMyo.pose != Pose.Rest){
+				} else if(thalmicMyo.pose != Pose.Rest) {
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 					isExiting = false;// stop exiting
 					consecutive = 0;// reset counter
-				}// if/else if...
-			} if(inDelete) {
+				}// if..else if
+			} else if(inDelete) {
 				if(thalmicMyo.pose == Pose.DoubleTap) {
 					consecutive++;// increment the counter
 				} else if(consecutive > 30 && lastPose == Pose.DoubleTap) {
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 					inDelete = false;
 					DeleteSelected();
 				} else if(thalmicMyo.pose != Pose.Rest) {
+					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("");
 					inDelete = false;// stop exiting
 					consecutive = 0;// reset counter
-				}// if/else if...
+				}// if..else if
 				// update the last pose detected
 				lastPose = thalmicMyo.pose;
-			} else if(allowAccess){
+			} else if(allowAccess) {
 				if(thalmicMyo.pose != Pose.DoubleTap) inDelete = false;// reset the deletion access
 
 				// if the fist pose is detected and was the last pose
@@ -78,7 +84,7 @@ public class SelectMode : MonoBehaviour {
 					inDelete = true;
 					// ask the user if the would like to delete the object
 					gameUI.gameObject.GetComponent<UpdateGameUI>().UpdateMessageText("Repeat Double-Tap gesture to Delete selected object.");
-				}
+				}// if....else if
 
 				if(thalmicMyo.pose != Pose.Fist) gyroReset = true;// reset the gyro control
 
@@ -87,8 +93,8 @@ public class SelectMode : MonoBehaviour {
 			}// if/else if
 
 			if(thalmicMyo.pose == Pose.Rest && allowAccess == false) { 
-					allowAccess = true;
-				}// if	
+				allowAccess = true;
+			}// if	
 			
 		} else allowAccess = false;	
 	}// Update
@@ -190,5 +196,3 @@ public class SelectMode : MonoBehaviour {
 	}// Exit
 
 }// SelectMode
-
-// ref from: https://stackoverflow.com/questions/18836484/convert-yaw-pitch-and-roll-to-x-y-z-vector-in-world-coordinates

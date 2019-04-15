@@ -7,35 +7,35 @@ using UnityEngine.UI;
 public class DisplaySaves : MonoBehaviour {
 	SceneState ss;
     List<string> myDropOptions = new List<string>{};
-	  Dropdown myDropdown;
+	Dropdown myDropdown;
 
-	  private void Start () {
-		  	ss = SceneState.getInstance;
-		    myDropdown = GetComponent<Dropdown>();
-		    Display();
-	  }// Start
+	private void Start () {
+		ss = SceneState.getInstance;
+		myDropdown = GetComponent<Dropdown>();
+		Display();
+	}// Start
 	
-		void Display() {
-				// string myPath = @"C:\Users\Hughballs\Documents\guiProSave";
-				string myPath = Application.persistentDataPath;
+	public void Display() {
+		string myPath = Application.persistentDataPath;
 
-				DirectoryInfo dir = new DirectoryInfo(myPath);
-				FileInfo[] info = dir.GetFiles("*.csv");
-				
-				// List the save files in the data path.
-				for (int i = 0; i < info.Length; i++)	{
-						myDropOptions.Add(info[i].Name);
-						Debug.Log("options: " + myDropOptions);				
-				}// for
-				myDropdown.AddOptions(myDropOptions);		
-		}// Display
+		// get a handle on the directory
+		DirectoryInfo dir = new DirectoryInfo(myPath);
+		FileInfo[] info = dir.GetFiles("*.csv");
+		
+		// List the save files in the data path.
+		for (int i = 0; i < info.Length; i++)	{
+			myDropOptions.Add(info[i].Name);
+		}// for
 
-		public void onClick() {
-				int value = this.GetComponent<Dropdown>().value;
-				string SelectedSave = this.GetComponent<Dropdown>().options[value].text;
-				Debug.Log(SelectedSave);
-				// send it to the load scene
-				ss.LoadState(SelectedSave);
-		}// onClick
+		// add to the dropdown
+		myDropdown.AddOptions(myDropOptions);	
+	}// Display
+
+	public void onClick() {
+		int value = this.GetComponent<Dropdown>().value;
+		string SelectedSave = this.GetComponent<Dropdown>().options[value].text;
+		// send it to the load scene
+		ss.LoadState(SelectedSave);
+	}// onClick
 
 }// DisplaySaves
